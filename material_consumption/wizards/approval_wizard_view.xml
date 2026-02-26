@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_material_request_approval_wizard_form" model="ir.ui.view">
+        <field name="name">material.consumption.approval.wizard.form</field>
+        <field name="model">material.consumption.approval.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Approval Action">
+                <group>
+                    <field name="approval_action"/>
+                    <field name="approval_comments"/>
+                </group>
+                <footer>
+                    <button name="action_confirm" string="Confirm" type="object" class="btn-primary"/>
+                    <button string="Cancel" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_material_request_approval_wizard" model="ir.actions.act_window">
+        <field name="name">Approval Action</field>
+        <field name="res_model">material.consumption.approval.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+</odoo>

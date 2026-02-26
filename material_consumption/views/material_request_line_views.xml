@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- Material Request Line List View -->
+        <record id="view_material_request_line_list" model="ir.ui.view">
+            <field name="name">material.request.line.list</field>
+            <field name="model">material.request.line</field>
+            <field name="arch" type="xml">
+                <list string="Material Request Lines">
+                    <field name="request_id"/>
+                    <field name="product_id"/>
+                    <field name="location_id"/>
+                    <field name="description"/>
+                    <field name="uom_id"/>
+                    <field name="quantity"/>
+                    <field name="available_qty"/>
+                    <field name="unit_price"/>
+                    <field name="subtotal"/>
+                </list>
+            </field>
+        </record>
+
+        <!-- Material Request Line Form View -->
+        <record id="view_material_request_line_form" model="ir.ui.view">
+            <field name="name">material.request.line.form</field>
+            <field name="model">material.request.line</field>
+            <field name="arch" type="xml">
+                <form string="Material Request Line">
+                    <sheet>
+                        <group>
+                            <group>
+                                <field name="request_id"/>
+                                <field name="product_id"/>
+                                <field name="location_id"/>
+                                <field name="description"/>
+                            </group>
+                            <group>
+                                <field name="uom_id"/>
+                                <field name="quantity"/>
+                                <field name="unit_price"/>
+                                <field name="subtotal"/>
+                            </group>
+                        </group>
+                        <group>
+                            <field name="available_qty"/>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+    </data>
+</odoo>

@@ -1,0 +1,12 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_material_request_user,material.request.user,model_material_request,base.group_user,1,1,1,0
+access_material_request_manager,material.request.manager,model_material_request,base.group_user,1,1,1,1
+access_material_request_approver,material.request.approver,model_material_request,group_material_approver,1,1,0,0
+access_material_request_line_user,material.request.line.user,model_material_request_line,base.group_user,1,1,1,0
+access_material_request_line_manager,material.request.line.manager,model_material_request_line,base.group_user,1,1,1,1
+access_approval_history_user,approval.history.user,model_material_approval_history,base.group_user,1,1,0,0
+access_approval_history_manager,approval.history.manager,model_material_approval_history,base.group_user,1,1,1,1
+access_approval_level_config_user,approval.level.config.user,model_approval_level_configuration,base.group_user,1,0,0,0
+access_approval_level_config_manager,approval.level.config.manager,model_approval_level_configuration,group_material_manager,1,1,1,1
+access_material_request_approval_level_user,material.request.approval.level.user,model_material_request_approval_level,base.group_user,1,0,0,0
+access_material_request_approval_level_manager,material.request.approval.level.manager,model_material_request_approval_level,group_material_manager,1,1,1,1

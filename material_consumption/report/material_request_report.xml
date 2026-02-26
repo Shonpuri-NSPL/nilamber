@@ -1,0 +1,333 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <data>
+        <record id="action_material_request_report" model="ir.actions.report">
+            <field name="name">Material Request</field>
+            <field name="model">material.request</field>
+            <field name="report_type">qweb-pdf</field>
+            <field name="report_name">material_consumption.material_request_draft_report</field>
+            <field name="report_file">material_consumption.material_request_draft_report</field>
+            <field name="print_report_name">'Material Request - %s' % (object.name)</field>
+            <field name="binding_model_id" ref="model_material_request"/>
+            <field name="binding_type">report</field>
+        </record>
+        <template id="material_request_draft_report">
+            <t t-call="web.external_layout">
+                <main>
+                    <t t-foreach="docs" t-as="doc">
+                        <div class="page">
+                            <!-- Header -->
+                            <div class="header-section">
+                                <h1 class="text-center">MATERIAL REQUEST</h1>
+                                <h3 class="text-center">
+                                    <span t-if="doc.state == 'draft'">DRAFT</span>
+                                    <span t-if="doc.state in ('submitted', 'approved')">REQUEST</span>
+                                    <span t-if="doc.state in ('issued', 'rejected', 'cancelled')">ISSUE</span>
+                                    DOCUMENT
+                                </h3>
+                            </div>
+                            <!-- Document Info -->
+                            <div class="document-info">
+                                <table class="table table-bordered">
+                                    <!-- Row 1 -->
+                                    <tr>
+                                        <td>
+                                            <strong>Reference:</strong>
+                                        </td>
+                                        <td>
+                                            <span t-field="doc.name"/>
+                                        </td>
+
+                                        <td>
+                                            <strong>Date:</strong>
+                                        </td>
+                                        <td>
+                                            <span t-field="doc.request_date"/>
+                                        </td>
+
+                                        <td>
+                                            <strong>Requested By:</strong>
+                                        </td>
+                                        <td>
+                                            <span t-field="doc.requested_by.name"/>
+                                        </td>
+                                    </tr>
+
+                                    <!-- Row 2 -->
+                                    <tr>
+                                        <td>
+                                            <strong>Priority:</strong>
+                                        </td>
+                                        <td>
+                                            <span t-if="doc.priority == '0'">Low</span>
+                                            <span t-if="doc.priority == '1'">Normal</span>
+                                            <span t-if="doc.priority == '2'">High</span>
+                                            <span t-if="doc.priority == '3'">Urgent</span>
+                                        </td>
+
+                                        <td>
+                                            <strong>Request Type:</strong>
+                                        </td>
+                                        <td>
+                                            <span>Project</span>
+                                        </td>
+
+                                        <td>
+                                            <strong>Status:</strong>
+                                        </td>
+                                        <td>
+                                            <span t-if="doc.state == 'draft'" class="badge badge-secondary">Draft</span>
+                                            <span t-if="doc.state == 'submitted'" class="badge badge-warning">
+                                                Submitted
+                                            </span>
+                                            <span t-if="doc.state == 'approved'" class="badge badge-success">Approved
+                                            </span>
+                                            <span t-if="doc.state == 'rejected'" class="badge badge-danger">Rejected
+                                            </span>
+                                            <span t-if="doc.state == 'issued'" class="badge badge-info">Issued</span>
+                                            <span t-if="doc.state == 'cancelled'" class="badge badge-dark">Cancelled
+                                            </span>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+
+
+                            <!-- Project/Customer Info -->
+                            <div class="project-customer-info">
+                                <table class="table table-bordered" t-if="doc.request_type == 'project'">
+                                    <tr>
+                                        <td>
+                                            <strong>Project:</strong>
+                                        </td>
+                                        <td>
+                                            <span t-field="doc.project_id.name"/>
+                                        </td>
+                                    </tr>
+                                    <tr t-if="doc.task_id">
+                                        <td>
+                                            <strong>Task:</strong>
+                                        </td>
+                                        <td>
+                                            <span t-field="doc.task_id.name"/>
+                                        </td>
+                                    </tr>
+                                    <tr t-if="doc.dest_location_id">
+                                        <td>
+                                            <strong>Destination location:</strong>
+                                        </td>
+                                        <td>
+                                            <span t-field="doc.dest_location_id.name"/>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+
+                            <!-- Material Lines -->
+                            <div class="material-lines">
+                                <h4>MATERIALS REQUESTED</h4>
+                                <table class="table table-bordered table-striped">
+                                    <thead>
+                                        <tr style="background-color: #f5f5f5;">
+                                            <th class="text-center">#</th>
+                                            <th>Product</th>
+                                            <th>Location</th>
+                                            <th t-if="doc.is_billable">Unit Price</th>
+                                            <th class="text-center">Quantity</th>
+                                            <th>UOM</th>
+                                            <th t-if="doc.is_billable" class="text-right">Subtotal</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr t-foreach="doc.line_ids" t-as="line">
+                                            <td class="text-center">
+                                                <span t-esc="line_index + 1"/>
+                                            </td>
+                                            <td>
+                                                <span t-field="line.product_id.name"/>
+                                            </td>
+                                            <td>
+                                                <span t-field="line.location_id.name"/>
+                                            </td>
+                                            <td t-if="doc.is_billable">
+                                                <span t-field="line.unit_price"
+                                                      t-options='{"widget": "monetary", "display_currency": doc.currency_id}'/>
+                                            </td>
+                                            <td class="text-center">
+                                                <span t-field="line.quantity"/>
+                                            </td>
+                                            <td>
+                                                <span t-field="line.uom_id.name"/>
+                                            </td>
+                                            <td t-if="doc.is_billable" class="text-right">
+                                                <span t-field="line.subtotal"
+                                                      t-options='{"widget": "monetary", "display_currency": doc.currency_id}'/>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                    <tfoot>
+                                        <tr t-if="doc.is_billable">
+                                            <td colspan="6" class="text-right">
+                                                <strong>TOTAL AMOUNT:</strong>
+                                            </td>
+                                            <td class="text-right">
+                                                <strong>
+                                                    <span t-field="doc.total_amount"
+                                                          t-options='{"widget": "monetary", "display_currency": doc.currency_id}'/>
+                                                </strong>
+                                            </td>
+                                        </tr>
+                                    </tfoot>
+                                </table>
+                            </div>
+
+                            <!-- Approval Info -->
+                            <div class="approval-info" t-if="doc.state in ('submitted', 'approved', 'issued')">
+                                <h4>APPROVAL INFORMATION</h4>
+                                <table class="table table-bordered">
+                                    <tr>
+                                        <td>
+                                            <strong>Current Approval Level:</strong>
+                                        </td>
+                                        <td>
+                                            <span t-field="doc.current_approval_level"/>
+                                            /
+                                            <span t-field="doc.required_approval_level"/>
+                                        </td>
+                                    </tr>
+                                </table>
+                                <table class="table table-bordered" t-if="doc.approval_history_ids">
+                                    <thead>
+                                        <tr style="background-color: #f5f5f5;">
+                                            <th>Date</th>
+                                            <th>Action</th>
+                                            <th>Level</th>
+                                            <th>User</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr t-foreach="doc.approval_history_ids" t-as="history">
+                                            <td>
+                                                <span t-field="history.create_date"
+                                                      t-options='{"format": "dd/MM/yyyy HH:mm"}'/>
+                                            </td>
+                                            <td>
+                                                <span t-if="history.action == 'submit'" class="badge badge-info">
+                                                    Submitted
+                                                </span>
+                                                <span t-if="history.action == 'approve'" class="badge badge-success">
+                                                    Approved
+                                                </span>
+                                                <span t-if="history.action == 'reject'" class="badge badge-danger">
+                                                    Rejected
+                                                </span>
+                                                <span t-if="history.action == 'issue'" class="badge badge-primary">
+                                                    Issued
+                                                </span>
+                                                <span t-if="history.action == 'cancel'" class="badge badge-secondary">
+                                                    Cancelled
+                                                </span>
+                                            </td>
+                                            <td>
+                                                <span t-field="history.approval_level"/>
+                                            </td>
+                                            <td>
+                                                <span t-field="history.user_id.name"/>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+
+                            <!-- Stock Picking Info -->
+                            <div class="picking-info" t-if="doc.picking_id">
+                                <h4>STOCK PICKING</h4>
+                                <table class="table table-bordered">
+                                    <tr>
+                                        <td>
+                                            <strong>Picking Reference:</strong>
+                                        </td>
+                                        <td>
+                                            <span t-field="doc.picking_id.name"/>
+                                        </td>
+                                        <td>
+                                            <strong>Date:</strong>
+                                        </td>
+                                        <td>
+                                            <span t-field="doc.picking_id.scheduled_date"
+                                                  t-options='{"format": "dd/MM/yyyy HH:mm"}'/>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+
+                            <!-- Notes -->
+                            <div class="notes-section" t-if="doc.notes">
+                                <h4>NOTES</h4>
+                                <p t-field="doc.notes"/>
+                            </div>
+
+                            <!-- Signatures -->
+                            <div class="signatures-section" style="margin-top: 12px;">
+                                <table class="table table-borderless" style="margin-bottom: 0; width: 100%;">
+                                    <tr>
+
+                                        <!-- Requested By -->
+                                        <td class="text-center" style="width: 33%; vertical-align: bottom;">
+                                            <strong>
+                                                <span t-field="doc.requested_by.name"/>
+                                            </strong>
+                                            <small>
+                                                <span t-field="doc.request_date"/>
+                                            </small>
+
+                                            <div style="border-bottom: 1px solid #000; height: 35px; margin-top: 5px;"></div>
+                                            <strong>Requested By</strong>
+                                        </td>
+
+                                        <!-- Approved By -->
+                                        <td class="text-center" style="width: 33%; vertical-align: bottom;">
+                                            <t t-set="approved_line"
+                                               t-value="doc.approval_history_ids.filtered(lambda h: h.action == 'approve')[:1]"/>
+
+                                            <t t-if="approved_line">
+                                                <strong>
+                                                    <span t-esc="approved_line.user_id.name"/>
+                                                </strong>
+                                                <small>
+                                                    <span t-esc="approved_line.create_date.strftime('%d/%m/%Y')"/>
+                                                </small>
+                                            </t>
+
+                                            <div style="border-bottom: 1px solid #000; height: 35px; margin-top: 5px;"></div>
+                                            <strong>Approved By</strong>
+                                        </td>
+
+                                        <!-- Received By -->
+                                        <td class="text-center" style="width: 33%; vertical-align: bottom;">
+                                            <div style="border-bottom: 1px solid #000; height: 35px; margin-top: 5px;"></div>
+                                            <strong>Received By</strong>
+                                        </td>
+
+                                    </tr>
+                                </table>
+                            </div>
+
+
+                            <!-- Footer -->
+                            <div class="footer-section text-center">
+                                <p class="text-muted">Generated on
+                                    <span t-esc="context_timestamp(datetime.datetime.now()).strftime('%d/%m/%Y %H:%M')"/>
+                                </p>
+                            </div>
+                        </div>
+                        <!-- Page break between multiple records -->
+                        <t t-if="not doc_last">
+                            <div style="page-break-after: always;"></div>
+                        </t>
+                    </t>
+                </main>
+            </t>
+        </template>
+    </data>
+</odoo>

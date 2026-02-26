@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- Approval History List View -->
+        <record id="view_approval_history_list" model="ir.ui.view">
+            <field name="name">approval.history.list</field>
+            <field name="model">material.approval.history</field>
+            <field name="arch" type="xml">
+                <list string="Approval History" decoration-muted="action == 'submit'" decoration-success="action == 'approve'" decoration-danger="action == 'reject'" decoration-info="action == 'issue'" decoration-warning="action == 'cancel'">
+                    <field name="request_id"/>
+                    <field name="user_id"/>
+                    <field name="action"/>
+                    <field name="approval_level"/>
+                    <field name="date"/>
+                    <field name="comments"/>
+                </list>
+            </field>
+        </record>
+
+        <!-- Approval History Form View -->
+        <record id="view_approval_history_form" model="ir.ui.view">
+            <field name="name">approval.history.form</field>
+            <field name="model">material.approval.history</field>
+            <field name="arch" type="xml">
+                <form string="Approval History">
+                    <sheet>
+                        <group>
+                            <group>
+                                <field name="request_id"/>
+                                <field name="user_id"/>
+                                <field name="action"/>
+                            </group>
+                            <group>
+                                <field name="approval_level"/>
+                                <field name="date"/>
+                            </group>
+                        </group>
+                        <field name="comments"/>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <!-- Approval History Search View -->
+        <record id="view_approval_history_search" model="ir.ui.view">
+            <field name="name">approval.history.search</field>
+            <field name="model">material.approval.history</field>
+            <field name="arch" type="xml">
+                <search string="Search Approval History">
+                    <field name="request_id"/>
+                    <field name="user_id"/>
+                    <filter name="submit" string="Submitted" domain="[('action', '=', 'submit')]"/>
+                    <filter name="approve" string="Approved" domain="[('action', '=', 'approve')]"/>
+                    <filter name="reject" string="Rejected" domain="[('action', '=', 'reject')]"/>
+                    <filter name="issue" string="Issued" domain="[('action', '=', 'issue')]"/>
+                    <filter name="cancel" string="Cancelled" domain="[('action', '=', 'cancel')]"/>
+                    <group>
+                        <filter name="group_by_action" string="Action" context="{'group_by': 'action'}"/>
+                        <filter name="group_by_user" string="User" context="{'group_by': 'user_id'}"/>
+                        <filter name="group_by_date" string="Date" context="{'group_by': 'date'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <!-- Approval History Action -->
+        <record id="action_approval_history" model="ir.actions.act_window">
+            <field name="name">Approval History</field>
+            <field name="res_model">material.approval.history</field>
+            <field name="view_mode">list,form</field>
+            <field name="search_view_id" ref="view_approval_history_search"/>
+            <field name="context">{}</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                    Click to create a new approval history record.
+                </p>
+                <p>
+                    Approval history tracks all actions taken on material requests.
+                </p>
+            </field>
+        </record>
+    </data>
+</odoo>

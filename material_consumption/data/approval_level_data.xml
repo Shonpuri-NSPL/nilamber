@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <!-- Default Approval Level Configuration - Created on module installation -->
+        
+        <!-- Level 1: For requests up to 10,000 -->
+        <record id="approval_level_1" model="approval.level.configuration">
+            <field name="name">Level 1 - Standard</field>
+            <field name="level_number">1</field>
+            <field name="sequence">1</field>
+            <field name="approval_type">amount</field>
+            <field name="min_amount">0</field>
+            <field name="max_amount">10000</field>
+            <field name="active">True</field>
+            <field name="description">Standard approval level for requests up to 10,000</field>
+            <field name="approver_group_ids" eval="[(6, 0, [ref('material_consumption.group_approval_level_1')])]"/>
+        </record>
+        
+        <!-- Level 2: For requests from 10,001 to 50,000 -->
+        <record id="approval_level_2" model="approval.level.configuration">
+            <field name="name">Level 2 - High Value</field>
+            <field name="level_number">2</field>
+            <field name="sequence">2</field>
+            <field name="approval_type">amount</field>
+            <field name="min_amount">10001</field>
+            <field name="max_amount">50000</field>
+            <field name="active">True</field>
+            <field name="description">Higher approval level for requests from 10,001 to 50,000</field>
+            <field name="approver_group_ids" eval="[(6, 0, [ref('material_consumption.group_approval_level_2')])]"/>
+        </record>
+        
+        <!-- Level 3: For requests from 50,001 to 100,000 -->
+        <record id="approval_level_3" model="approval.level.configuration">
+            <field name="name">Level 3 - Premium</field>
+            <field name="level_number">3</field>
+            <field name="sequence">3</field>
+            <field name="approval_type">amount</field>
+            <field name="min_amount">50001</field>
+            <field name="max_amount">100000</field>
+            <field name="active">True</field>
+            <field name="description">Premium approval level for requests from 50,001 to 100,000</field>
+            <field name="approver_group_ids" eval="[(6, 0, [ref('material_consumption.group_approval_level_3')])]"/>
+        </record>
+        
+        <!-- Level 4: For requests above 100,000 -->
+        <record id="approval_level_4" model="approval.level.configuration">
+            <field name="name">Level 4 - Executive</field>
+            <field name="level_number">4</field>
+            <field name="sequence">4</field>
+            <field name="approval_type">amount</field>
+            <field name="min_amount">100001</field>
+            <field name="active">True</field>
+            <field name="description">Executive approval level for requests above 100,000</field>
+            <field name="approver_group_ids" eval="[(6, 0, [ref('material_consumption.group_approval_level_4')])]"/>
+        </record>
+        
+    </data>
+</odoo>

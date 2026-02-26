@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- Main Menu -->
+        <menuitem
+                id="menu_material_consumption_root"
+                name="Material Consumption"
+                sequence="10"
+                web_icon="material_consumption,static/description/icon.png"/>
+
+        <!-- Material Request Menu -->
+        <menuitem
+                id="menu_material_request"
+                name="Material Requests"
+                parent="menu_material_consumption_root"
+                sequence="10"
+                action="action_material_request"/>
+
+        <!-- My Requests Menu -->
+        <menuitem
+                id="menu_my_material_requests"
+                name="My Requests"
+                parent="menu_material_consumption_root"
+                sequence="20"
+                action="action_my_material_request"/>
+
+        <!-- Pending Approvals Menu -->
+        <menuitem
+                id="menu_pending_approvals"
+                name="Pending Approvals"
+                parent="menu_material_consumption_root"
+                sequence="30"
+                action="action_pending_approvals"/>
+
+        <!-- Configuration Menu -->
+        <menuitem
+                id="menu_material_configuration"
+                name="Configuration"
+                parent="menu_material_consumption_root"
+                sequence="100"/>
+
+        <!-- Approval Level Configuration Menu -->
+        <menuitem
+                id="menu_approval_level_configuration"
+                name="Approval Levels"
+                parent="menu_material_configuration"
+                sequence="10"
+                action="action_approval_level_configuration"
+                groups="material_consumption.group_material_manager"/>
+    </data>
+</odoo>
