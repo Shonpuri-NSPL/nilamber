@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+
+        <record id="rfq_zero_price_confirm_wizard_form_view" model="ir.ui.view">
+            <field name="name">rfq.zero.price.confirm.wizard.form</field>
+            <field name="model">rfq.zero.price.confirm.wizard</field>
+            <field name="arch" type="xml">
+                <form>
+                    <sheet>
+                        <div class="alert alert-warning" role="alert">
+                            <h4 class="alert-heading">⚠️ Zero Price Warning</h4>
+                            <field name="message" readonly="1" nolabel="1"/>
+                        </div>
+                        
+                        <group>
+                            <field name="exclude_zero_price_lines"/>
+                        </group>
+                    </sheet>
+                    <footer>
+                        <button name="action_confirm_with_prices" 
+                                type="object" 
+                                class="btn-primary"
+                                string="Create RFQ with Prices Only"/>
+                        <button name="action_confirm_with_prices" 
+                                type="object" 
+                                class="btn-primary"
+                                string="Proceed with Valid Prices"/>
+                        <button name="action_confirm_with_zero_prices" 
+                                type="object" 
+                                class="btn-secondary"
+                                string="Include Zero Price Products"/>
+                        <button name="action_cancel_rfq" 
+                                type="object" 
+                                class="btn-danger"
+                                string="Cancel RFQ Creation"/>
+                        <button string="Cancel" class="btn-secondary" special="cancel"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+    </data>
+</odoo>

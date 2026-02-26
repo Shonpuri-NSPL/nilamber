@@ -1,0 +1,161 @@
+/* RFQ Dashboard Styles */
+
+.o_rfq_dashboard {
+    padding: 20px;
+    background-color: #f8f9fa;
+}
+
+.o_dashboards {
+    background-color: #f8f9fa !important;
+}
+
+/* Header styles */
+.container .row {
+    margin-bottom: 15px;
+}
+
+.form-group label {
+    margin-bottom: 8px;
+    color: #333;
+}
+
+/* Bulk action buttons */
+.btn-success {
+    background-color: #28a745;
+    border-color: #28a745;
+    color: white;
+}
+
+.btn-success:hover {
+    background-color: #218838;
+    border-color: #1e7e34;
+}
+
+.btn-warning {
+    background-color: #ffc107;
+    border-color: #ffc107;
+    color: #212529;
+}
+
+.btn-warning:hover {
+    background-color: #e0a800;
+    border-color: #d39e00;
+}
+
+/* Checkbox styles */
+.line-checkbox {
+    margin-right: 8px;
+    transform: scale(1.2);
+    cursor: pointer;
+}
+
+#select-all-checkbox {
+    margin-right: 5px;
+    transform: scale(1.1);
+    cursor: pointer;
+}
+
+/* Table enhancements */
+.pways-table {
+    background-color: white;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    border-radius: 5px;
+    overflow: hidden;
+}
+
+.pways-table-highlighted {
+    background-color: white;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+    border-radius: 5px;
+    overflow: hidden;
+}
+
+.thead-custom {
+    background: darkslategrey;
+    color: white;
+}
+
+.headcol {
+    background: darkslategrey !important;
+    color: white !important;
+    font-weight: bold;
+}
+
+.table_footer {
+    background-color: #f8f9fa;
+    font-weight: bold;
+    border-top: 2px solid #dee2e6;
+}
+
+/* Button styles in table */
+.confirm_line {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+    padding: 2px;
+    margin-right: 5px;
+}
+
+.confirm_line:hover {
+    color: #28a745 !important;
+    transform: scale(1.1);
+}
+
+.remove_line {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+    color: #dc3545;
+    padding: 2px;
+}
+
+.remove_line:hover {
+    color: #c82333 !important;
+    transform: scale(1.1);
+}
+
+/* Vendor highlight styles */
+.by_price {
+    background: #e8f5e8 !important;
+    border-left: 3px solid #28a745;
+}
+
+.by_date {
+    background: #fff3cd !important;
+    border-left: 3px solid #ffc107;
+}
+
+/* Alert styles for zero price warnings */
+.alert {
+    border-radius: 5px;
+    margin-bottom: 15px;
+}
+
+.alert-warning {
+    background-color: #fff3cd;
+    border-color: #ffeaa7;
+    color: #856404;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .container .row {
+        flex-direction: column;
+    }
+    
+    .col-sm-2, .col-sm-4 {
+        width: 100%;
+        margin-bottom: 10px;
+    }
+    
+    .table_div {
+        overflow-x: scroll;
+    }
+    
+    .btn {
+        padding: 8px 12px;
+        font-size: 14px;
+    }
+}

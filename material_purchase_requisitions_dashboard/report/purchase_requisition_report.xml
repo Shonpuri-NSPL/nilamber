@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="report_purchase_requisition" model="ir.actions.report">
+            <field name="name">Purchase Requisition</field>
+            <field name="model">material.purchase.requisition</field>
+            <field name="report_type">qweb-pdf</field>
+            <field name="report_name">material_purchase_requisitions_dashboard.purchase_requisition</field>
+            <field name="report_file">material_purchase_requisitions_dashboard.purchase_requisition</field>
+            <field name="binding_model_id"
+                   ref="material_purchase_requisitions_dashboard.model_material_purchase_requisition"/>
+            <field name="binding_type">report</field>
+        </record>
+
+        <template id="purchase_requisition">
+            <t t-call="web.html_container">
+                <t t-foreach="docs" t-as="doc">
+                    <t t-call="web.external_layout">
+                        <div class="page">
+                            <!-- TITLE -->
+                            <h2 class="text-center mb-3">
+                                Purchase Requisition
+                            </h2>
+                            <!-- DOCUMENT INFO -->
+                            <p class="text-center">
+                                <strong>Requisition No:</strong>
+                                <span t-esc="doc.name"/>
+                                |
+                                <strong>Date:</strong>
+                                <span t-esc="doc.request_date"/>
+                            </p>
+                            <!-- BASIC INFORMATION -->
+                            <h4 class="mt-4">Basic Information</h4>
+                            <table class="table table-sm">
+                                <tbody>
+                                    <tr>
+                                        <th>Employee</th>
+                                        <td t-esc="doc.employee_id.name"/>
+                                        <th>Department</th>
+                                        <td t-esc="doc.department_id.name"/>
+                                    </tr>
+                                    <tr>
+                                        <th>Requisition Date</th>
+                                        <td t-esc="doc.request_date"/>
+                                        <th>Required Date</th>
+                                        <td t-esc="doc.receive_date"/>
+                                    </tr>
+                                    <tr>
+                                        <th>Requisition Type</th>
+                                        <td t-esc="doc.requisition_type"/>
+                                        <th>Site Location</th>
+                                        <td t-esc="doc.site_location.name"/>
+                                    </tr>
+                                    <tr>
+                                        <th>Company</th>
+                                        <td t-esc="doc.company_id.name"/>
+                                        <th>Warehouse</th>
+                                        <td t-esc="doc.warehouse_id.name"/>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <!-- REASON -->
+                            <t t-if="doc.reason">
+                                <h4 class="mt-4">Reason for Requisition</h4>
+                                <p t-esc="doc.reason"/>
+                            </t>
+                            <!-- REQUISITION DETAILS -->
+                            <h4 class="mt-4">Requisition Details</h4>
+                            <table class="table table-sm o_main_table">
+                                <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>Product</th>
+                                        <th>Description</th>
+                                        <th class="text-end">Qty</th>
+                                        <th>UOM</th>
+                                        <th>Remarks</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <t t-set="line_index" t-value="0"/>
+                                    <t t-foreach="doc.requisition_line_ids" t-as="line">
+                                        <t t-set="line_index" t-value="line_index + 1"/>
+                                        <tr>
+                                            <td t-esc="line_index"/>
+                                            <td t-esc="line.product_id.name"/>
+                                            <td t-esc="line.description"/>
+                                            <td class="text-end" t-esc="line.qty"/>
+                                            <td t-esc="line.uom.name"/>
+                                            <td/>
+                                        </tr>
+                                    </t>
+                                    <t t-if="not doc.requisition_line_ids">
+                                        <tr>
+                                            <td colspan="6" class="text-center text-muted">
+                                                No items specified
+                                            </td>
+                                        </tr>
+                                    </t>
+                                </tbody>
+                            </table>
+                            <!-- APPROVALS -->
+                            <h4 class="mt-4">Approval Workflow</h4>
+                            <table class="table table-sm">
+                                <tbody>
+                                    <tr>
+                                        <th>Requested By</th>
+                                        <td t-esc="doc.employee_id.name"/>
+                                        <th>Request Date</th>
+                                        <td t-esc="doc.request_date"/>
+                                    </tr>
+                                    <tr>
+                                        <th>Department Approved By</th>
+                                        <td t-esc="doc.approve_manager_id.name or 'Pending'"/>
+                                        <th>Approval Date</th>
+                                        <td t-esc="doc.managerapp_date or 'Pending'"/>
+                                    </tr>
+                                    <tr>
+                                        <th>Final Approved By</th>
+                                        <td t-esc="doc.approve_employee_id.name or 'Pending'"/>
+                                        <th>Final Approval Date</th>
+                                        <td t-esc="doc.userrapp_date or 'Pending'"/>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <t t-if="doc.purchase_order_ids">
+                                <h4 class="mt-4">Confirmed Purchase Order Details</h4>
+                                <table class="table table-sm o_main_table">
+                                    <thead>
+                                        <tr>
+                                            <th>PO Number</th>
+                                            <th>Vendor</th>
+                                            <th>Order Date</th>
+                                            <th>Status</th>
+                                            <th class="text-end">Total Amount</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <t t-foreach="doc.purchase_order_ids" t-as="po">
+                                            <t t-if="po.state in ['purchase', 'done']">
+                                                <tr>
+                                                    <td t-esc="po.name"/>
+                                                    <td t-esc="po.partner_id.name"/>
+                                                    <td t-esc="po.date_order"/>
+                                                    <td>
+                                                        <span class="badge bg-success">
+                                                            Confirmed
+                                                        </span>
+                                                    </td>
+                                                    <td class="text-end">
+                                                        <t t-esc="po.amount_total"/>
+                                                    </td>
+                                                </tr>
+                                            </t>
+                                        </t>
+                                    </tbody>
+                                </table>
+                            </t>
+
+                            <!-- FOOTER NOTE -->
+                            <p class="text-center text-muted mt-4">
+                                This is a system-generated document.
+                            </p>
+                        </div>
+                    </t>
+                </t>
+            </t>
+        </template>
+    </data>
+</odoo>

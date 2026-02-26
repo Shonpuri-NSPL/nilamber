@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+
+        <record id="rfq_wizard_form_view" model="ir.ui.view">
+            <field name="name">rfq.wizard.form</field>
+            <field name="model">rfq.wizard</field>
+            <field name="arch" type="xml">
+                <form>
+                    <sheet>
+                        <group>
+                            <field name="requisition_id" readonly="1"/>
+                            <field name="rfq_type"/>
+                            <field name="partner_id" invisible="rfq_type != 'all_to_one'"/>
+                            <field name="partner_ids" invisible="rfq_type != 'all_to_all'" widget="many2many_tags"/>
+                        </group>
+                        <separator/>
+                        <notebook>
+                            <page name="order_lines" string="Product List">
+                                <field name="line_ids" create="0" delete="0" editable="bottom">
+                                    <list editable="bottom">
+                                        <field name="product_id" readonly="1" force_save="1"/>
+                                        <field name="qty"/>
+                                        <field name="price_unit"/>
+                                    </list>
+                                </field>
+
+                            </page>
+                        </notebook>
+                    </sheet>
+                    <footer>
+                        <button name="create_rfqs" string="Create RFQs" type="object" class="btn-primary"/>
+                        <button string="Cancel" class="btn-secondary" special="cancel"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+    </data>
+</odoo>

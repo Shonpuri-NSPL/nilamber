@@ -1,0 +1,218 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+
+        <record id="material_purchase_requisition_form_view" model="ir.ui.view">
+            <field name="name">material.purchase.requisition.form.view</field>
+            <field name="model">material.purchase.requisition</field>
+            <field name="arch" type="xml">
+                <form>
+                    <header>
+                        <button name="requisition_confirm" type="object" string="Confirm" invisible="state != 'draft'"
+                                class="btn-primary" groups="base.group_user"/>
+                        <button name="budget_approve" type="object" string="Budget Approve" invisible="state != 'budget_check'"
+                                class="btn-primary" groups="material_purchase_requisitions_dashboard.group_purchase_requisition_user"/>
+                        <button name="manager_approve" type="object" string="Department Approve"
+                                invisible="state not in ('dept_confirm','cancel')" class="btn-primary"
+                                groups="material_purchase_requisitions_dashboard.group_purchase_requisition_department"/>
+                        <button name="procurement_review" type="object" string="Procurement Review" invisible="state != 'ir_approve'"
+                                class="btn-primary" groups="material_purchase_requisitions_dashboard.group_purchase_requisition_user"/>
+                        <button name="user_approve" type="object" string="Approve" invisible="state != 'procurement_review'"
+                                class="btn-primary"
+                                groups="material_purchase_requisitions_dashboard.group_purchase_requisition_user"/>
+                        <button name="create_rfqs" type="object" string="Create RFQs" invisible="state != 'rfq_creation'"
+                                class="btn-primary" groups="material_purchase_requisitions_dashboard.group_purchase_requisition_user"/>
+                        <button name="requisition_reject" type="object" string="Reject"
+                                groups="material_purchase_requisitions_dashboard.group_purchase_requisition_department,material_purchase_requisitions_dashboard.group_purchase_requisition_user"
+                                invisible="state not in ('dept_confirm','approve','ir_approve')"/>
+                        <button name="action_cancel" type="object" invisible="state != 'draft'" string="Cancel"
+                                groups="base.group_user"/>
+                        <button name="reset_draft" type="object" string="Reset to Draft" invisible="state not in ('cancel','reject')"
+                                class="btn-primary"/>
+                        <field name="state" widget="statusbar" string="confirm" options="{'clickable': '1'}"
+                                statusbar_visible="draft,budget_check,dept_confirm,ir_approve,procurement_review,rfq_creation,comparison,po_confirm"/>
+                    </header>
+                    <sheet>
+                        <div class="oe_button_box" name="button_box">
+                            <button class="oe_stat_button" type="object" name="action_show_po" icon="fa-list">
+                                <div class="o_field_widget o_stat_info">
+                                    <span class="o_stat_text">RFQs</span>
+                                    <span class="o_stat_text">/Purchase Orders</span>
+                                </div>
+                            </button>
+                            <button class="oe_stat_button" type="object" name="action_show_history" icon="fa-history">
+                                <div class="o_field_widget o_stat_info">
+                                    <span class="o_stat_text">State</span>
+                                    <span class="o_stat_text">History</span>
+                                </div>
+                            </button>
+                        </div>
+
+                        <div class="oe_title">
+                            <div class="oe_title">
+                                <h1>
+                                    <field name="name"/>
+                                    <br/>
+                                </h1>
+                            </div>
+                        </div>
+                        <group>
+                            <group>
+                                <field name="employee_id" readonly="state != 'draft'"/>
+                                <field name="department_id" readonly="state != 'draft'"/>
+                                <field name="project_id" readonly="state != 'draft'"/>
+                                <field name="company_id" groups="base.group_multi_company"
+                                       readonly="state != 'draft'"/>
+                            </group>
+                            <group>
+                                <field name="request_date" readonly="state != 'draft'"/>
+                                <field name="receive_date"
+                                       readonly="state in ('reject','cancel')"/>
+                                <field name="site_location" domain="[('usage', '=', 'internal')]" readonly="state != 'draft'"/>
+                                <field name="picking_type_id" options="{'no_open': True, 'no_create': True}" groups="stock.group_adv_location" readonly="state != 'draft'" domain="[('warehouse_id.company_id', '=', company_id)]"/>
+                            </group>
+
+                        </group>
+                        <notebook>
+                            <page string="Requisitions Lines">
+                                <field name="requisition_line_ids"
+                                       readonly="state in ('cancel')">
+                                    <list editable="bottom">
+                                        <field name="product_id"/>
+                                        <field name="description"/>
+                                        <field name="qty"/>
+                                        <field name="uom"/>
+                                    </list>
+                                </field>
+                                <group>
+                                    <field name="reason"
+                                           readonly="state in ('reject','cancel')"
+                                           placeholder="Add Reason for Internal Requisition ...."/>
+                                </group>
+                            </page>
+                            <page string="State History">
+                                <field name="state_history_ids" readonly="1">
+                                    <list decoration-info="to_state == 'draft'" 
+                                          decoration-warning="to_state == 'reject'"
+                                          decoration-success="to_state in ['po_confirm', 'approve']">
+                                        <field name="date"/>
+                                        <field name="state_label"/>
+                                        <field name="user_id"/>
+                                        <field name="notes"/>
+                                    </list>
+                                </field>
+                            </page>
+                            <page string="Approval History">
+                                <group string="Confirmation Information">
+                                    <group>
+                                        <field name="employee_confirm_id" readonly="1"/>
+                                        <field name="confirm_date" readonly="1"/>
+                                    </group>
+                                </group>
+                                
+                                <group string="Approval Information">
+                                    <group>
+                                        <field name="approve_manager_id" readonly="1"/>
+                                        <field name="managerapp_date" readonly="1"/>
+                                        <field name="approve_employee_id" readonly="1"/>
+                                        <field name="userrapp_date" readonly="1"/>
+                                    </group>
+                                </group>
+                                
+                                <group string="Rejection Information" invisible="state != 'reject'">
+                                    <group>
+                                        <field name="reject_employee_id" readonly="1"/>
+                                        <field name="userreject_date" readonly="1"/>
+                                        <field name="reject_reason" readonly="1" 
+                                               style="min-height: 60px; background-color: #ffe6e6;"/>
+                                    </group>
+                                </group>
+                            </page>
+                        </notebook>
+                    </sheet>
+                    <chatter/>
+                </form>
+            </field>
+        </record>
+
+        <record id="material_purchase_requisition_tree_view" model="ir.ui.view">
+            <field name="name">material.purchase.requisition.view.tree</field>
+            <field name="model">material.purchase.requisition</field>
+            <field name="arch" type="xml">
+                <list>
+                    <field name="name"/>
+                    <field name="employee_id"/>
+                    <field name="department_id"/>
+                    <field name="project_id"/>
+                    <field name="site_location"/>
+                    <field name="request_date"/>
+                    <field name="company_id" groups="base.group_multi_company"/>
+                    <field name="approve_manager_id" optional="hide"/>
+                    <field name="approve_employee_id" optional="hide"/>
+                    <field name="reject_employee_id" optional="hide"/>
+                    <field name="state"/>
+                </list>
+            </field>
+        </record>
+
+        <record id="material_purchase_requisition_search_view" model="ir.ui.view">
+            <field name="name">material.purchase.requisition search</field>
+            <field name="model">material.purchase.requisition</field>
+            <field name="arch" type="xml">
+                <search string="Purchase Requistion search">
+                    <field name="employee_id"/>
+                    <field name="project_id"/>
+                    <field name="site_location"/>
+                    <field name="request_date"/>
+                    <field name="company_id" groups="base.group_multi_company"/>
+                    <field name="department_id"/>
+                    <field name="approve_manager_id"/>
+                    <field name="approve_employee_id"/>
+                    <field name="managerapp_date"/>
+                    <field name="userrapp_date"/>
+                    <field name="receive_date"/>
+                    <field name="date_done"/>
+                    <field name="reason"/>
+                    <field name="state"/>
+                    <group>
+                        <filter string="Employee" name="employee_id" context="{'group_by':'employee_id'}"/>
+                        <filter string="Project" name="project_id" context="{'group_by':'project_id'}"/>
+                        <filter string="Reqisition Date" name="request_date" context="{'group_by':'request_date'}"/>
+                        <filter string="Company" name="company" context="{'group_by':'company_id'}"
+                                groups="base.group_multi_company"/>
+                        <filter string="Department" name="department" context="{'group_by':'department_id'}"/>
+                        <filter string="Department Manager" name="department_manager"
+                                context="{'group_by':'approve_manager_id'}"/>
+                        <filter string="Approve By" name="approve_by" context="{'group_by':'approve_employee_id'}"/>
+                        <filter string="Manager Approve Date" name="managerapp_date"
+                                context="{'group_by':'managerapp_date'}"/>
+                        <filter string="User Approve Date" name="userapp_date" context="{'group_by':'userrapp_date'}"/>
+                        <filter string="Reason" name="reason" context="{'group_by':'reason'}"/>
+                        <filter string="Date Done" name="date_done" context="{'group_by':'date_done'}"/>
+                        <filter string="State" name="state" context="{'group_by':'state'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <record model="ir.actions.act_window" id="action_material_purchase_requisition">
+            <field name="name">Purchase Requisitions</field>
+            <field name="res_model">material.purchase.requisition</field>
+            <!--<field name="view_type">form</field>-->
+            <field name="view_mode">list,form</field>
+        </record>
+
+        <menuitem id="menu_purchase_requisition"
+                  name="Requisitions"
+                  groups="base.group_user"
+                  web_icon="material_purchase_requisitions,static/description/icon.png"/>
+        <menuitem id="menu_item_purchase_requisition"
+                  name="Purchase Requisition"
+                  parent="menu_purchase_requisition"/>
+        <menuitem id="menu_action_purchase_requisition"
+                  name="Purchase Requisitions"
+                  parent="menu_item_purchase_requisition"
+                  action="action_material_purchase_requisition"/>
+
+    </data>
+</odoo>
