@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Main Menu -->
+    <menuitem name="Construction DPR"
+              id="menu_dpr_root"
+              web_icon="construction_dpr,static/description/icon.png"
+              sequence="10"/>
+
+    <!-- Dashboard Menu -->
+    <!--    <menuitem name="Dashboard"-->
+    <!--              id="menu_dpr_dashboard"-->
+    <!--              parent="menu_dpr_root"-->
+    <!--              action="action_dpr_dashboard"-->
+    <!--              sequence="1"/>-->
+
+    <!-- Projects Menu -->
+    <menuitem name="Projects"
+              id="menu_dpr_projects"
+              parent="menu_dpr_root"
+              sequence="10"/>
+
+    <menuitem name="All Projects"
+              id="menu_dpr_all_projects"
+              parent="menu_dpr_projects"
+              action="action_dpr_project"
+              sequence="1"/>
+
+    <menuitem name="Tasks"
+              id="menu_dpr_tasks"
+              parent="menu_dpr_projects"
+              action="action_dpr_task"
+              sequence="2"/>
+
+
+    <menuitem id="menu_project_setup_wizard"
+              name="Project Setup Wizard"
+              parent="construction_dpr.menu_dpr_root"
+              action="action_project_setup_wizard"
+              sequence="20"/>
+
+
+    <!-- DPR Reports Menu -->
+    <menuitem name="Daily Reports"
+              id="menu_dpr_reports"
+              parent="menu_dpr_root"
+              sequence="30"/>
+
+    <menuitem name="All DPRs"
+              id="menu_dpr_all_reports"
+              parent="menu_dpr_reports"
+              action="action_dpr_report"
+              sequence="1"/>
+
+    <menuitem name="Pending Approvals"
+              id="menu_dpr_pending_approvals"
+              parent="menu_dpr_reports"
+              action="action_dpr_pending_approvals"
+              sequence="2"/>
+
+    <menuitem name="Approved DPRs"
+              id="menu_dpr_approved_reports"
+              parent="menu_dpr_reports"
+              action="action_dpr_approved"
+              sequence="3"/>
+
+    <!-- Team Menu -->
+    <menuitem name="DPR Team"
+              id="menu_dpr_team"
+              parent="menu_dpr_root"
+              sequence="40"/>
+
+     <!-- Employee Access Menu -->
+    <menuitem name="Access Control"
+              id="menu_dpr_employee_access"
+              parent="menu_dpr_team"
+              action="action_dpr_employee_access"
+              sequence="1"/>
+
+    <menuitem name="Employees"
+              id="menu_dpr_employees"
+              parent="menu_dpr_team"
+              action="action_dpr_employee"
+              sequence="2"/>
+
+
+
+    <!-- Reports Menu -->
+    <menuitem name="Reports"
+              id="menu_dpr_report_menu"
+              parent="menu_dpr_root"
+              sequence="50"/>
+
+    <menuitem name="Generate Reports"
+              id="menu_dpr_generate_report"
+              parent="menu_dpr_report_menu"
+              action="action_dpr_report_wizard"
+              sequence="1"/>
+
+    <!--    <menuitem name="Summary Report"-->
+    <!--              id="menu_dpr_summary_report"-->
+    <!--              parent="menu_dpr_report_menu"-->
+    <!--              action="action_dpr_summary"-->
+    <!--              sequence="2"/>-->
+
+    <!-- Configuration Menu -->
+    <menuitem name="Configuration"
+              id="menu_dpr_config"
+              parent="menu_dpr_root"
+              sequence="60"/>
+
+    <menuitem id="menu_dpr_hierarchy" name="Project Hierarchy"
+              parent="construction_dpr.menu_dpr_config" sequence="1"/>
+
+    <menuitem name="Settings"
+              id="menu_dpr_settings"
+              parent="menu_dpr_config"
+              action="action_dpr_config"
+              sequence="2"/>
+
+    <!-- Menu Item for Task Types -->
+    <menuitem id="menu_dpr_task_type"
+              name="Task Types"
+              action="action_dpr_task_type"
+              parent="menu_dpr_config"
+              sequence="20"/>
+
+    <!-- Menu Item for Equipment Types -->
+    <menuitem id="menu_dpr_equipment_type"
+              name="Equipment Types"
+              action="action_dpr_equipment_type"
+              parent="menu_dpr_config"
+              sequence="21"/>
+
+    <!-- Quick Actions -->
+    <menuitem name="New DPR"
+              id="menu_dpr_new_report"
+              parent="menu_dpr_reports"
+              action="action_dpr_report_create"
+              sequence="0"/>
+
+
+    <!-- Menu Items -->
+
+
+    <menuitem id="menu_dpr_towers" name="Towers"
+              parent="menu_dpr_hierarchy" action="action_dpr_task_towers" sequence="1"/>
+
+    <menuitem id="menu_dpr_floors" name="Floors"
+              parent="menu_dpr_hierarchy" action="action_dpr_task_floors" sequence="2"/>
+
+    <menuitem id="menu_dpr_units" name="Units"
+              parent="menu_dpr_hierarchy" action="action_dpr_task_units" sequence="3"/>
+
+    <menuitem id="menu_dpr_activities" name="Activities"
+              parent="menu_dpr_hierarchy" action="action_dpr_task_activities" sequence="4"/>
+
+    <menuitem id="menu_dpr_activity_templates" name="Activity Templates"
+              parent="construction_dpr.menu_dpr_config" action="action_dpr_activity_templates" sequence="10"/>
+
+    <menuitem id="menu_dpr_create_units_wizard" name="Create Units (Bulk)"
+              parent="menu_dpr_hierarchy" action="action_create_units_wizard" sequence="5"/>
+
+
+</odoo>

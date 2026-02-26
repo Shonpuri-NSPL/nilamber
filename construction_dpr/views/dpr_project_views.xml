@@ -1,0 +1,226 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Project Tree View -->
+    <record id="view_dpr_project_tree" model="ir.ui.view">
+        <field name="name">dpr.project.tree</field>
+        <field name="model">dpr.project</field>
+        <field name="arch" type="xml">
+            <list decoration-success="state=='active'" decoration-muted="state=='completed'"
+                  decoration-danger="state=='cancelled'">
+                <field name="code"/>
+                <field name="name"/>
+                <field name="project_manager_id"/>
+                <field name="location"/>
+                <field name="state"/>
+                <field name="overall_progress" widget="progressbar"/>
+                <field name="start_date"/>
+                <field name="end_date"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- Project Form View -->
+    <record id="view_dpr_project_form" model="ir.ui.view">
+        <field name="name">dpr.project.form</field>
+        <field name="model">dpr.project</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button name="action_draft" string="Set to Draft" type="object"
+                            invisible="state not in ('active', 'on_hold')"/>
+                    <button name="action_activate" string="Activate" type="object" invisible="state != 'draft'"
+                            class="oe_highlight"/>
+                    <button name="action_put_on_hold" string="Put on Hold" type="object" invisible="state != 'active'"/>
+                    <button name="action_complete" string="Complete" type="object" invisible="state != 'active'"
+                            class="oe_highlight"/>
+                    <button name="action_cancel" string="Cancel" type="object"
+                            invisible="state not in ('draft', 'active', 'on_hold')"/>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,active,completed"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="code" readonly="1"/>
+                        </h1>
+                    </div>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="action_open_odoo_project" type="object" class="oe_stat_button"
+                                icon="fa-external-link" invisible="not odoo_project_id">
+                            <field name="project_count" widget="statinfo" string="Projects"/>
+                        </button>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="name" required="1"/>
+                            <!--                            <field name="client_id" invisbile="1"/>-->
+                            <field name="project_manager_id"/>
+                            <field name="location"/>
+                            <field name="odoo_project_id"/>
+                            <field name="project_type"/>
+                        </group>
+                        <group>
+                            <field name="start_date"/>
+                            <field name="end_date"/>
+                            <field name="actual_end_date" readonly="1"/>
+                            <field name="estimated_budget"/>
+                            <field name="actual_cost" readonly="1"/>
+                            <field name="analytic_account_id" readonly="1"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Description">
+                            <field name="description" placeholder="Project description..."/>
+                        </page>
+                        <page string="Tasks">
+                            <field name="task_ids" context="{'default_project_id': id}">
+                                <list>
+                                    <field name="task_code"/>
+                                    <field name="name"/>
+                                    <field name="state"/>
+                                    <field name="progress_percentage" widget="progressbar"/>
+                                    <field name="assigned_to_id"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="Employees">
+                            <field name="employee_ids"/>
+                        </page>
+                        <page string="Location">
+                            <group>
+                                <field name="latitude"/>
+                                <field name="longitude"/>
+                            </group>
+                        </page>
+                    </notebook>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <!-- Project Search View -->
+    <record id="view_dpr_project_search" model="ir.ui.view">
+        <field name="name">dpr.project.search</field>
+        <field name="model">dpr.project</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name"/>
+                <field name="code"/>
+                <field name="project_manager_id"/>
+                <filter string="Active" name="active" domain="[('state', '=', 'active')]"/>
+                <filter string="Completed" name="completed" domain="[('state', '=', 'completed')]"/>
+                <group>
+                    <filter string="State" name="groupby_state" context="{'group_by': 'state'}"/>
+                    <filter string="Type" name="groupby_type" context="{'group_by': 'project_type'}"/>
+                    <filter string="Manager" name="groupby_manager" context="{'group_by': 'project_manager_id'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- Project Kanban View -->
+    <record id="view_dpr_project_kanban" model="ir.ui.view">
+        <field name="name">dpr.project.kanban</field>
+        <field name="model">dpr.project</field>
+        <field name="arch" type="xml">
+            <kanban default_group_by="state" class="o_kanban_mobile" sample="1">
+                <field name="state"/>
+                <field name="code"/>
+                <field name="name"/>
+                <field name="project_type"/>
+                <field name="location"/>
+                <field name="client_id"/>
+                <field name="project_manager_id"/>
+                <field name="start_date"/>
+                <field name="end_date"/>
+                <field name="estimated_budget"/>
+                <field name="actual_cost"/>
+                <field name="budget_status"/>
+                <field name="cost_variance"/>
+                <field name="overall_progress"/>
+                <field name="total_tasks"/>
+                <field name="completed_tasks"/>
+                <field name="is_overdue"/>
+                <field name="days_overdue"/>
+                <field name="activity_ids"/>
+                <field name="activity_state"/>
+                <progressbar field="state"
+                             colors='{"active": "success", "draft": "200", "on_hold": "warning", "completed": "muted", "cancelled": "danger"}'/>
+                <templates>
+                    <t t-name="card">
+                        <div class="d-flex flex-column gap-1">
+                            <div class="d-flex justify-content-between align-items-start">
+                                <div class="fw-bold fs-5 text-truncate" style="max-width: 70%;">
+                                    <field name="code"/>
+                                </div>
+                                <field name="state" widget="label_selection"
+                                       options="{'classes': {'draft': 'bg-secondary', 'active': 'bg-success', 'completed': 'bg-info', 'on_hold': 'bg-warning', 'cancelled': 'bg-danger'}}"/>
+                            </div>
+                            <div class="text-muted small text-truncate">
+                                <field name="name"/>
+                            </div>
+                            <div class="d-flex align-items-center text-muted small">
+                                <i class="fa fa-map-marker me-1" title="Location"/>
+                                <field name="location"/>
+                            </div>
+                            <div class="d-flex align-items-center text-muted small">
+                                <i class="fa fa-user me-1" title="Project Manager"/>
+                                <field name="project_manager_id"/>
+                            </div>
+                            <div class="d-flex align-items-center text-muted small">
+                                <i class="fa fa-calendar me-1" title="Start - End Date"/>
+                                <field name="start_date"/>
+                                -
+                                <field name="end_date"/>
+                            </div>
+                        </div>
+                        <div class="mt-2 pt-2 border-top">
+                            <div class="d-flex align-items-center mb-1">
+                                <span class="me-2 small text-muted">Progress:</span>
+                                <field name="overall_progress" widget="progressbar"
+                                       options="{'scales': true, 'percentage_value': true}"/>
+                            </div>
+                            <div class="d-flex justify-content-between small text-muted mb-1">
+                                <span><field name="completed_tasks"/>/
+                                    <field name="total_tasks"/>
+                                    Tasks
+                                </span>
+                            </div>
+                        </div>
+                        <div class="mt-2 pt-2 border-top">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div class="small">
+                                    <span class="text-muted">Budget:</span>
+                                </div>
+                                <div class="fw-bold"
+                                     t-attf-class="{{record.budget_status.raw_value == 'over_budget' ? 'text-danger' : record.budget_status.raw_value == 'warning' ? 'text-warning' : 'text-success'}}">
+                                    <field name="actual_cost"/>
+                                    /
+                                    <field name="estimated_budget"/>
+                                </div>
+                            </div>
+                            <div class="progress mt-1" style="height: 4px;">
+                                <div class="progress-bar"
+                                     t-attf-class="{{record.budget_status.raw_value == 'over_budget' ? 'bg-danger' : record.budget_status.raw_value == 'warning' ? 'bg-warning' : 'bg-success'}}"
+                                     t-attf-style="width: {{Math.min(record.cost_variance.raw_value, 100)}}%"/>
+                            </div>
+                        </div>
+                        <footer class="pt-2 mt-2 border-top">
+                            <div class="d-flex align-items-center">
+                                <field name="activity_ids" widget="kanban_activity"/>
+                            </div>
+                        </footer>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
+    <!-- Project Action -->
+    <record id="action_dpr_project" model="ir.actions.act_window">
+        <field name="name">Projects</field>
+        <field name="res_model">dpr.project</field>
+        <field name="view_mode">list,form,kanban,pivot,graph</field>
+        <field name="search_view_id" ref="view_dpr_project_search"/>
+    </record>
+</odoo>

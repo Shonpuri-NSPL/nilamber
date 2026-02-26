@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Security Groups -->
+    <record id="group_dpr_user" model="res.groups">
+        <field name="name">DPR User</field>
+        <field name="comment">Can create and view DPR reports</field>
+    </record>
+
+    <record id="group_dpr_approver" model="res.groups">
+        <field name="name">DPR Approver</field>
+        <field name="comment">Can approve and reject DPR reports</field>
+    </record>
+
+    <record id="group_dpr_manager" model="res.groups">
+        <field name="name">DPR Manager</field>
+        <field name="comment">Full access to all DPR features</field>
+    </record>
+
+    <!-- Record Rules -->
+    <record id="rule_dpr_project_user" model="ir.rule">
+        <field name="name">DPR Project User Rule</field>
+        <field name="model_id" ref="model_dpr_project"/>
+        <field name="groups" eval="[(4, ref('construction_dpr.group_dpr_user'))]"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">0</field>
+        <field name="perm_create">0</field>
+        <field name="perm_unlink">0</field>
+    </record>
+
+    <record id="rule_dpr_project_manager" model="ir.rule">
+        <field name="name">DPR Project Manager Rule</field>
+        <field name="model_id" ref="model_dpr_project"/>
+        <field name="groups" eval="[(4, ref('construction_dpr.group_dpr_manager'))]"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">1</field>
+        <field name="perm_create">1</field>
+        <field name="perm_unlink">1</field>
+    </record>
+</odoo>

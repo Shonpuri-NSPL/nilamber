@@ -1,0 +1,405 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Task Tree View -->
+    <record id="view_dpr_task_tree" model="ir.ui.view">
+        <field name="name">dpr.task.tree</field>
+        <field name="model">dpr.task</field>
+        <field name="arch" type="xml">
+            <list decoration-success="state=='completed'" decoration-info="state=='in_progress'"
+                  decoration-warning="state=='blocked'">
+                <field name="task_code"/>
+                <field name="name"/>
+                <field name="project_id"/>
+                <field name="assigned_to_id"/>
+                <field name="state"/>
+                <field name="priority" widget="badge"/>
+                <field name="progress_percentage" widget="progressbar"/>
+                <field name="planned_end_date"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- Task Form View -->
+    <record id="view_dpr_task_form" model="ir.ui.view">
+        <field name="name">dpr.task.form</field>
+        <field name="model">dpr.task</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button name="action_start" string="Start Task" type="object"
+                            invisible="[('state', '=', 'pending')]" class="oe_highlight"/>
+                    <button name="action_complete" string="Complete" type="object"
+                            invisible="[('state', '=', 'in_progress')]" class="oe_highlight"/>
+                    <button name="action_verify" string="Verify" type="object"
+                            invisible="[('state', '=', 'completed')]"/>
+                    <button name="action_block" string="Block" type="object"
+                            invisible="[('state', '=', 'in_progress')]"/>
+                    <button name="action_reset" string="Reset" type="object" invisible="[('state', '=', 'blocked')]"/>
+                    <field name="state" widget="statusbar" statusbar_visible="pending,in_progress,completed,verified"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="task_code" readonly="1"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="name" required="1"/>
+                            <field name="project_id" required="1"/>
+                            <field name="assigned_to_id"/>
+                            <field name="task_type_id"/>
+                            <field name="priority"/>
+                        </group>
+                        <group>
+                            <field name="planned_start_date"/>
+                            <field name="planned_end_date"/>
+                            <field name="actual_start_date"/>
+                            <field name="actual_end_date"/>
+                            <field name="estimated_hours"/>
+                            <field name="actual_hours" readonly="1"/>
+                        </group>
+                    </group>
+                    <group>
+                        <field name="progress_percentage" widget="progressbar"/>
+                    </group>
+                    <notebook>
+                        <page string="Description">
+                            <field name="description" placeholder="Task details..."/>
+                        </page>
+                        <page string="Labor Entries">
+                            <field name="labor_ids">
+                                <list editable="bottom">
+                                    <field name="employee_id"/>
+                                    <field name="hours_worked"/>
+                                    <field name="work_description"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="Material Entries">
+                            <field name="material_ids">
+                                <list editable="bottom">
+                                    <field name="item_name"/>
+                                    <field name="quantity"/>
+                                    <field name="unit"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="Equipment Entries">
+                            <field name="equipment_ids">
+                                <list editable="bottom">
+                                    <field name="equipment_name"/>
+                                    <field name="equipment_type"/>
+                                    <field name="hours_operated"/>
+                                </list>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Task Search View -->
+    <record id="view_dpr_task_search" model="ir.ui.view">
+        <field name="name">dpr.task.search</field>
+        <field name="model">dpr.task</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name"/>
+                <field name="task_code"/>
+                <field name="project_id"/>
+                <field name="tower_id"/>
+                <field name="floor_id"/>
+                <field name="unit_id"/>
+                <field name="assigned_to_id"/>
+                <filter string="Pending" name="pending" domain="[('state', '=', 'pending')]"/>
+                <filter string="In Progress" name="in_progress" domain="[('state', '=', 'in_progress')]"/>
+                <filter string="Completed" name="completed" domain="[('state', '=', 'completed')]"/>
+                <filter string="Overdue" name="overdue" domain="[('is_overdue', '=', True)]"/>
+                <group>
+                    <filter string="Project" name="group_by_project" context="{'group_by': 'project_id'}"/>
+                    <filter string="Tower" name="group_by_tower" context="{'group_by': 'tower_id'}"/>
+                    <filter string="Floor" name="group_by_floor" context="{'group_by': 'floor_id'}"/>
+                    <filter string="Unit" name="group_by_unit" context="{'group_by': 'unit_id'}"/>
+                    <filter string="State" name="group_by_state" context="{'group_by': 'state'}"/>
+                    <filter string="Priority" name="group_by_priority" context="{'group_by': 'priority'}"/>
+                    <filter string="Task Level" name="group_by_task_level" context="{'group_by': 'task_level'}"/>
+                    <filter string="Activity Status" name="group_by_activity_status"
+                            context="{'group_by': 'activity_status'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+
+    <!-- Modern Kanban View for DPR Tasks -->
+    <record id="view_dpr_task_kanban" model="ir.ui.view">
+        <field name="name">dpr.task.kanban</field>
+        <field name="model">dpr.task</field>
+        <field name="arch" type="xml">
+            <kanban default_group_by="project_id">
+                <field name="id"/>
+                <field name="name"/>
+                <field name="task_code"/>
+                <field name="project_id"/>
+                <field name="tower_id"/>
+                <field name="floor_id"/>
+                <field name="unit_id"/>
+                <field name="task_level"/>
+                <field name="state"/>
+                <field name="activity_status"/>
+                <field name="progress_percentage"/>
+                <field name="activities_progress_pct"/>
+                <field name="activities_total"/>
+                <field name="activities_completed"/>
+                <field name="activities_in_progress"/>
+                <field name="planned_end_date"/>
+                <field name="priority"/>
+                <field name="assigned_to_id"/>
+                <field name="is_overdue"/>
+                <field name="days_overdue"/>
+                <templates>
+                    <t t-name="card">
+                        <div t-attf-class="oe_kanban_card oe_kanban_global_click o_dpr_task_card #{record.is_overdue.raw_value ? 'oe_kanban_overdue' : ''}" style="background: linear-gradient(135deg, #f5f7fa 0%, #e4e8ec 100%); border-radius: 12px; padding: 12px; margin-bottom: 8px; border-left: 4px solid #{record.state.raw_value == 'completed' ? '#28a745' : record.state.raw_value == 'in_progress' ? '#0d6efd' : record.state.raw_value == 'blocked' ? '#dc3545' : '#6c757d'};">
+                            <!-- Header with Task Code and Priority -->
+                            <div class="row mb-2">
+                                <div class="col-8">
+                                    <span style="color: #6c757d; font-size: 11px; font-weight: 600;">
+                                        <i class="fa fa-tasks" aria-hidden="true" style="color: #667eea;"/> 
+                                        <t t-esc="record.task_code.value"/>
+                                    </span>
+                                </div>
+                                <div class="col-4 text-end">
+                                    <t t-if="record.priority.raw_value == 'critical'">
+                                        <span class="badge" style="background: linear-gradient(135deg, #ff6b6b 0%, #ee5a5a 100%); color: white; font-size: 10px;">Critical</span>
+                                    </t>
+                                    <t t-elif="record.priority.raw_value == 'high'">
+                                        <span class="badge" style="background: linear-gradient(135deg, #ffc107 0%, #e0a800 100%); color: #212529; font-size: 10px;">High</span>
+                                    </t>
+                                    <t t-elif="record.priority.raw_value == 'medium'">
+                                        <span class="badge" style="background: linear-gradient(135deg, #0dcaf0 0%, #0bb2d4 100%); color: white; font-size: 10px;">Medium</span>
+                                    </t>
+                                    <t t-else="">
+                                        <span class="badge" style="background: linear-gradient(135deg, #6c757d 0%, #5a6268 100%); color: white; font-size: 10px;">Low</span>
+                                    </t>
+                                </div>
+                            </div>
+
+                            <!-- Task Name -->
+                            <div style="font-size: 14px; font-weight: 600; color: #212529; margin-bottom: 8px; line-height: 1.4;">
+                                <t t-esc="record.name.value"/>
+                            </div>
+
+                            <!-- Task Level Badge -->
+                            <div class="mb-2">
+                                <t t-if="record.task_level.raw_value == 'tower'">
+                                    <span style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 3px 8px; border-radius: 12px; font-size: 10px;">
+                                        <i class="fa fa-building"/> Tower
+                                    </span>
+                                </t>
+                                <t t-elif="record.task_level.raw_value == 'floor'">
+                                    <span style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); color: white; padding: 3px 8px; border-radius: 12px; font-size: 10px;">
+                                        <i class="fa fa-layer-group"/> Floor
+                                    </span>
+                                </t>
+                                <t t-elif="record.task_level.raw_value == 'unit'">
+                                    <span style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); color: white; padding: 3px 8px; border-radius: 12px; font-size: 10px;">
+                                        <i class="fa fa-home"/> Unit
+                                    </span>
+                                </t>
+                                <t t-elif="record.task_level.raw_value == 'activity'">
+                                    <span style="background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%); color: white; padding: 3px 8px; border-radius: 12px; font-size: 10px;">
+                                        <i class="fa fa-cogs"/> Activity
+                                    </span>
+                                </t>
+                                <t t-else="">
+                                    <span style="background: linear-gradient(135deg, #6c757d 0%, #5a6268 100%); color: white; padding: 3px 8px; border-radius: 12px; font-size: 10px;">
+                                        <i class="fa fa-tasks"/> Task
+                                    </span>
+                                </t>
+                            </div>
+
+                            <!-- Hierarchy Info -->
+                            <div style="background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%); border-radius: 8px; padding: 8px; margin-bottom: 10px;">
+                                <t t-if="record.tower_id.raw_value">
+                                    <div style="font-size: 12px; color: #495057; margin-bottom: 2px;">
+                                        <i class="fa fa-building-o" style="color: #667eea;" title="Tower"/>
+                                        <span class="ms-1"><t t-esc="record.tower_id.value"/></span>
+                                    </div>
+                                </t>
+                                <t t-if="record.floor_id.raw_value">
+                                    <div style="font-size: 12px; color: #495057; margin-bottom: 2px;">
+                                        <i class="fa fa-layer-group" style="color: #f5576c;" title="Floor"/>
+                                        <span class="ms-1"><t t-esc="record.floor_id.value"/></span>
+                                    </div>
+                                </t>
+                                <t t-if="record.unit_id.raw_value">
+                                    <div style="font-size: 12px; color: #495057;">
+                                        <i class="fa fa-home" style="color: #4facfe;" title="Unit"/>
+                                        <span class="ms-1"><t t-esc="record.unit_id.value"/></span>
+                                    </div>
+                                </t>
+                            </div>
+
+                            <!-- Progress Section -->
+                            <div style="margin-top: 8px;">
+                                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
+                                    <small style="color: #6c757d;">Progress</small>
+                                    <small style="font-weight: bold; color: #{record.progress_percentage.raw_value == 100 ? '#28a745' : '#0d6efd'};"><t t-esc="record.progress_percentage.value"/>%</small>
+                                </div>
+                                <div style="height: 8px; background: #e9ecef; border-radius: 4px; overflow: hidden;">
+                                    <div t-attf-style="width: #{record.progress_percentage.raw_value}%; background: linear-gradient(90deg, #{record.progress_percentage.raw_value == 100 ? '#28a745' : record.progress_percentage.raw_value > 50 ? '#4facfe' : '#667eea'} 0%, #{record.progress_percentage.raw_value == 100 ? '#20c997' : record.progress_percentage.raw_value > 50 ? '#00f2fe' : '#764ba2'} 100%); border-radius: 4px; height: 100%;"/>
+                                </div>
+                            </div>
+
+                            <!-- Activity Stats (for non-activity tasks) -->
+                            <t t-if="record.task_level.raw_value != 'activity'">
+                                <div style="margin-top: 10px; background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%); border-radius: 8px; padding: 10px;">
+                                    <div class="row g-1">
+                                        <div class="col-4">
+                                            <div style="text-align: center; background: linear-gradient(135deg, #d4edda 0%, #c3e6cb 100%); border-radius: 6px; padding: 6px;">
+                                                <div style="font-size: 18px; font-weight: bold; color: #28a745;"><t t-esc="record.activities_completed.value"/></div>
+                                                <div style="font-size: 9px; color: #155724;">Done</div>
+                                            </div>
+                                        </div>
+                                        <div class="col-4">
+                                            <div style="text-align: center; background: linear-gradient(135deg, #fff3cd 0%, #ffeeba 100%); border-radius: 6px; padding: 6px;">
+                                                <div style="font-size: 18px; font-weight: bold; color: #ffc107;"><t t-esc="record.activities_in_progress.value"/></div>
+                                                <div style="font-size: 9px; color: #856404;">In Progress</div>
+                                            </div>
+                                        </div>
+                                        <div class="col-4">
+                                            <div style="text-align: center; background: linear-gradient(135deg, #e2e3e5 0%, #d6d8db 100%); border-radius: 6px; padding: 6px;">
+                                                <div style="font-size: 18px; font-weight: bold; color: #6c757d;"><t t-esc="record.activities_total.value"/></div>
+                                                <div style="font-size: 9px; color: #383d41;">Total</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- Overall Progress Bar -->
+                                    <div style="margin-top: 8px;">
+                                        <div style="height: 6px; background: #e9ecef; border-radius: 3px; overflow: hidden;">
+                                            <div style="width: #{record.activities_progress_pct.raw_value}%; background: linear-gradient(90deg, #28a745 0%, #20c997 100%); border-radius: 3px; height: 100%;"/>
+                                        </div>
+                                        <small style="color: #6c757d; font-size: 10px;"><t t-esc="Math.round(record.activities_progress_pct.raw_value)"/>% Activities Complete</small>
+                                    </div>
+                                </div>
+                            </t>
+
+                            <!-- Activity Status (for activity tasks) -->
+                            <t t-if="record.task_level.raw_value == 'activity'">
+                                <div style="margin-top: 10px;">
+                                    <t t-if="record.activity_status.raw_value == 'done'">
+                                        <span style="background: linear-gradient(135deg, #28a745 0%, #20c997 100%); color: white; padding: 6px 12px; border-radius: 6px; width: 100%; display: block; text-align: center; font-size: 12px;">
+                                            <i class="fa fa-check-circle"/> Completed
+                                        </span>
+                                    </t>
+                                    <t t-elif="record.activity_status.raw_value == 'in_progress'">
+                                        <span style="background: linear-gradient(135deg, #ffc107 0%, #e0a800 100%); color: #212529; padding: 6px 12px; border-radius: 6px; width: 100%; display: block; text-align: center; font-size: 12px;">
+                                            <i class="fa fa-spinner"/> In Progress
+                                        </span>
+                                    </t>
+                                    <t t-elif="record.activity_status.raw_value == 'not_started'">
+                                        <span style="background: linear-gradient(135deg, #6c757d 0%, #5a6268 100%); color: white; padding: 6px 12px; border-radius: 6px; width: 100%; display: block; text-align: center; font-size: 12px;">
+                                            <i class="fa fa-clock-o"/> Not Started
+                                        </span>
+                                    </t>
+                                    <t t-elif="record.activity_status.raw_value == 'on_hold'">
+                                        <span style="background: linear-gradient(135deg, #0dcaf0 0%, #0bb2d4 100%); color: white; padding: 6px 12px; border-radius: 6px; width: 100%; display: block; text-align: center; font-size: 12px;">
+                                            <i class="fa fa-pause-circle"/> On Hold
+                                        </span>
+                                    </t>
+                                    <t t-elif="record.activity_status.raw_value == 'rework'">
+                                        <span style="background: linear-gradient(135deg, #dc3545 0%, #c82333 100%); color: white; padding: 6px 12px; border-radius: 6px; width: 100%; display: block; text-align: center; font-size: 12px;">
+                                            <i class="fa fa-exclamation-triangle"/> Rework
+                                        </span>
+                                    </t>
+                                    <t t-else="">
+                                        <span style="background: linear-gradient(135deg, #e9ecef 0%, #dee2e6 100%); color: #212529; padding: 6px 12px; border-radius: 6px; width: 100%; display: block; text-align: center; font-size: 12px;">
+                                            <t t-esc="record.activity_status.value"/>
+                                        </span>
+                                    </t>
+                                </div>
+                            </t>
+
+                            <!-- Footer with Status and Due Date -->
+                            <div style="margin-top: 10px; padding-top: 8px; border-top: 1px solid #dee2e6; display: flex; justify-content: space-between; align-items: center;">
+                                <div>
+                                    <t t-if="record.state.raw_value == 'completed'">
+                                        <span style="background: linear-gradient(135deg, #28a745 0%, #20c997 100%); color: white; padding: 4px 10px; border-radius: 12px; font-size: 11px;">
+                                            <i class="fa fa-check"/> Completed
+                                        </span>
+                                    </t>
+                                    <t t-elif="record.state.raw_value == 'in_progress'">
+                                        <span style="background: linear-gradient(135deg, #0d6efd 0%, #4facfe 100%); color: white; padding: 4px 10px; border-radius: 12px; font-size: 11px;">
+                                            <i class="fa fa-play"/> In Progress
+                                        </span>
+                                    </t>
+                                    <t t-elif="record.state.raw_value == 'pending'">
+                                        <span style="background: linear-gradient(135deg, #6c757d 0%, #5a6268 100%); color: white; padding: 4px 10px; border-radius: 12px; font-size: 11px;">
+                                            <i class="fa fa-pause"/> Pending
+                                        </span>
+                                    </t>
+                                    <t t-elif="record.state.raw_value == 'verified'">
+                                        <span style="background: linear-gradient(135deg, #20c997 0%, #38f9d7 100%); color: white; padding: 4px 10px; border-radius: 12px; font-size: 11px;">
+                                            <i class="fa fa-check-double"/> Verified
+                                        </span>
+                                    </t>
+                                    <t t-elif="record.state.raw_value == 'blocked'">
+                                        <span style="background: linear-gradient(135deg, #dc3545 0%, #c82333 100%); color: white; padding: 4px 10px; border-radius: 12px; font-size: 11px;">
+                                            <i class="fa fa-ban"/> Blocked
+                                        </span>
+                                    </t>
+                                </div>
+                                <div>
+                                    <t t-if="record.is_overdue.raw_value">
+                                        <span style="color: #dc3545; font-size: 11px;">
+                                            <i class="fa fa-exclamation-circle"/>
+                                            <t t-esc="record.days_overdue.value"/> days overdue
+                                        </span>
+                                    </t>
+                                    <t t-else="">
+                                        <small style="color: #6c757d; font-size: 11px;">
+                                            <i class="fa fa-calendar"/>
+                                            Due: <t t-esc="record.planned_end_date.value"/>
+                                        </small>
+                                    </t>
+                                </div>
+                            </div>
+
+                            <!-- Assigned To -->
+                            <t t-if="record.assigned_to_id.raw_value">
+                                <div style="margin-top: 8px; padding-top: 8px; border-top: 1px solid #dee2e6;">
+                                    <small style="color: #6c757d; font-size: 11px;">
+                                        <i class="fa fa-user" style="color: #667eea;"/> Assigned: <t t-esc="record.assigned_to_id.value"/>
+                                    </small>
+                                </div>
+                            </t>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
+
+    <!-- Task Action -->
+    <record id="action_dpr_task" model="ir.actions.act_window">
+        <field name="name">Tasks</field>
+        <field name="res_model">dpr.task</field>
+        <field name="view_mode">list,kanban,form</field>
+        <field name="search_view_id" ref="view_dpr_task_search"/>
+        <field name="context">{
+            'search_default_group_by_project': 1
+            }
+        </field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create a Lead
+            </p>
+            <p>
+                Leads are the qualification step before the creation of an opportunity.
+            </p>
+        </field>
+    </record>
+</odoo>

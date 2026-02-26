@@ -1,0 +1,235 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- Project Setup Wizard Form -->
+    <record id="view_project_setup_wizard_form" model="ir.ui.view">
+        <field name="name">project.setup.wizard.form</field>
+        <field name="model">project.setup.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Project Setup Wizard">
+                <header>
+                    <button name="action_previous_step" string="← Previous" type="object"
+                            invisible="step == 'project'" class="btn-secondary"/>
+                    <button name="action_next_step" string="Next →" type="object"
+                            invisible="step == 'review'" class="oe_highlight"/>
+                    <button name="action_create_project" string="Create Project" type="object"
+                            invisible="step != 'review'" class="oe_highlight"/>
+                    <button string="Cancel" class="btn-secondary" special="cancel"/>
+                    <field name="step" widget="statusbar" statusbar_visible="project,towers,review"/>
+                </header>
+                <sheet>
+                    <!-- Step 1: Project Details -->
+                    <div invisible="step != 'project'">
+                        <div class="oe_title">
+                            <h1>
+                                <i class="fa fa-building-o"/>
+                                Project Setup Wizard
+                            </h1>
+                            <p>Let's create your construction project structure</p>
+                        </div>
+
+                        <group>
+                            <group>
+                                <field name="project_name" placeholder="e.g., BELLISSIMO-04" class="text-uppercase"/>
+                                <field name="project_code" placeholder="e.g., PROJ-001" class="text-uppercase"/>
+                                <field name="project_location" placeholder="e.g., Vadodara , Gujarat"
+                                       class="text-uppercase"/>
+                            </group>
+                            <group>
+                                <field name="project_budget" placeholder="e.g., 5000000"
+                                       help="How much id the total cost of project?"/>
+                                <field name="project_start_date"/>
+                                <field name="project_end_date"/>
+                            </group>
+                        </group>
+
+                        <group string="Tower Configuration">
+                            <field name="tower_count"
+                                   help="How many towers/buildings in this project?"/>
+                        </group>
+
+                        <group string="Default Unit Configuration">
+                            <group>
+                                <field name="default_unit_type"/>
+                                <field name="default_carpet_area"/>
+                            </group>
+                            <group>
+                                <field name="create_activities"/>
+                                <field name="activity_template_ids" widget="many2many_tags"
+                                       invisible="not create_activities"
+                                       placeholder="Leave empty for all 19 standard activities"/>
+                            </group>
+                        </group>
+                    </div>
+
+                    <!-- Step 2: Tower Configuration -->
+                    <div invisible="step != 'towers'">
+                        <div class="oe_title">
+                            <h1>
+                                <i class="fa fa-building"/>
+                                Tower Configuration
+                            </h1>
+                            <p>Configure floors and units for each tower</p>
+                        </div>
+
+                        <field name="tower_line_ids">
+                            <list editable="bottom">
+                                <field name="sequence" widget="handle"/>
+                                <field name="tower_name" class="text-uppercase"/>
+                                <field name="tower_code" class="text-uppercase"/>
+                                <field name="floor_count"/>
+                                <field name="total_units" string="Units"/>
+                                <button name="action_refresh_floors"
+                                        string="🔄"
+                                        type="object"
+                                        title="Regenerate Floors"
+                                        class="btn-link"/>
+                                <button name="action_configure_floors"
+                                        string="Configure Floors"
+                                        type="object"
+                                        icon="fa-cog"
+                                        class="btn-link"/>
+                            </list>
+                        </field>
+
+                        <div class="alert alert-info" role="alert">
+                            <strong>Tip:</strong>
+                            Click "Configure Floors" to customize units per floor.
+                            By default, each floor will have 4 units.
+                        </div>
+                    </div>
+
+                    <!-- Step 3: Review & Create -->
+                    <div invisible="step != 'review'">
+                        <div class="oe_title">
+                            <h1>
+                                <i class="fa fa-check-circle"/>
+                                Review &amp; Create
+                            </h1>
+                            <p>Review your project structure before creation</p>
+                        </div>
+
+                        <group>
+                            <group string="Project Summary">
+                                <field name="project_name" readonly="1"/>
+                                <field name="project_code" readonly="1"/>
+                                <field name="project_location" readonly="1"/>
+                            </group>
+                            <group string="Structure Summary">
+                                <field name="total_towers" readonly="1"/>
+                                <field name="total_floors" readonly="1"/>
+                                <field name="total_units" readonly="1"/>
+                                <field name="total_activities" readonly="1"/>
+                            </group>
+                        </group>
+                        <notebook>
+                            <page>
+                                <group string="Tower Details">
+                                    <field name="tower_line_ids" nolabel="1">
+                                        <list>
+                                            <field name="tower_name"/>
+                                            <field name="tower_code"/>
+                                            <field name="floor_count" string="Floors"/>
+                                            <field name="total_units" string="Units"/>
+                                        </list>
+                                    </field>
+                                </group>
+                            </page>
+                        </notebook>
+                        <div class="alert alert-success" role="alert">
+                            <strong>Ready to create!</strong>
+                            <br/>
+                            This will create:
+                            <ul>
+                                <li>
+                                    <strong>
+                                        <field name="total_towers" readonly="1"/>
+                                    </strong>
+                                    Towers
+                                </li>
+                                <li>
+                                    <strong>
+                                        <field name="total_floors" readonly="1"/>
+                                    </strong>
+                                    Floors
+                                </li>
+                                <li>
+                                    <strong>
+                                        <field name="total_units" readonly="1"/>
+                                    </strong>
+                                    Units
+                                </li>
+                                <li>
+                                    <strong>
+                                        <field name="total_activities" readonly="1"/>
+                                    </strong>
+                                    Activities
+                                </li>
+                            </ul>
+                            Click "Create Project" to proceed.
+                        </div>
+                    </div>
+                </sheet>
+                <footer/>
+            </form>
+        </field>
+    </record>
+
+    <!-- Floor Configuration Tree View -->
+    <record id="view_project_setup_wizard_floor_tree" model="ir.ui.view">
+        <field name="name">project.setup.wizard.floor.tree</field>
+        <field name="model">project.setup.wizard.floor</field>
+        <field name="arch" type="xml">
+            <list string="Floor Configuration" editable="bottom">
+                <field name="floor_number"/>
+                <field name="floor_name"/>
+                <field name="units_per_floor"/>
+                <field name="unit_type" optional="show"/>
+                <field name="carpet_area" optional="show"/>
+                <button string="← Back to Wizard" name="action_back_to_wizard"
+                        type="object" class="btn-primary"
+                        help="Return to project setup wizard"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- Floor Configuration Form View -->
+    <record id="view_project_setup_wizard_floor_form" model="ir.ui.view">
+        <field name="name">project.setup.wizard.floor.form</field>
+        <field name="model">project.setup.wizard.floor</field>
+        <field name="arch" type="xml">
+            <form string="Floor Configuration">
+                <header>
+                    <button string="← Back to Wizard" name="action_back_to_wizard"
+                            type="object" class="btn-primary"
+                            help="Return to project setup wizard"/>
+                    <button string="Close" special="cancel" class="btn-secondary"/>
+                </header>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="floor_number"/>
+                            <field name="floor_name"/>
+                        </group>
+                        <group>
+                            <field name="units_per_floor"/>
+                            <field name="unit_type"/>
+                            <field name="carpet_area"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Wizard Action -->
+    <record id="action_project_setup_wizard" model="ir.actions.act_window">
+        <field name="name">Project Setup Wizard</field>
+        <field name="res_model">project.setup.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+        <field name="context">{}</field>
+    </record>
+
+
+</odoo>

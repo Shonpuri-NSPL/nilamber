@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- DPR Summary Report Template -->
+    <template id="dpr_summary_report_html">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="doc">
+                <div class="page">
+                    <h2>Daily Progress Report</h2>
+                    <div class="row">
+                        <div class="col-6">
+                            <strong>Report Number:</strong> <t t-esc="doc.name"/>
+                        </div>
+                        <div class="col-6">
+                            <strong>Date:</strong> <t t-esc="doc.report_date"/>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-6">
+                            <strong>Project:</strong> <t t-esc="doc.project_id.name"/>
+                        </div>
+                        <div class="col-6">
+                            <strong>Prepared By:</strong> <t t-esc="doc.prepared_by_id.name"/>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-12">
+                            <strong>Work Summary:</strong>
+                            <p><t t-esc="doc.work_summary"/></p>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-4">
+                            <strong>Labor Cost:</strong> <t t-esc="doc.total_labor_cost"/>
+                        </div>
+                        <div class="col-4">
+                            <strong>Material Cost:</strong> <t t-esc="doc.total_material_cost"/>
+                        </div>
+                        <div class="col-4">
+                            <strong>Equipment Cost:</strong> <t t-esc="doc.total_equipment_cost"/>
+                        </div>
+                    </div>
+                </div>
+            </t>
+        </t>
+    </template>
+
+    <!-- DPR Summary Report Action -->
+    <record id="action_report_dpr_summary" model="ir.actions.report">
+        <field name="name">DPR Summary Report</field>
+        <field name="model">dpr.report</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">construction_dpr.dpr_summary_report_html</field>
+        <field name="report_file">construction_dpr.dpr_summary_report</field>
+    </record>
+
+    <!-- DPR Material Report Action -->
+    <record id="action_report_dpr_material" model="ir.actions.report">
+        <field name="name">DPR Material Report</field>
+        <field name="model">dpr.report</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">construction_dpr.dpr_material</field>
+        <field name="report_file">construction_dpr.dpr_material_report</field>
+    </record>
+
+    <!-- DPR Equipment Report Action -->
+    <record id="action_report_dpr_equipment" model="ir.actions.report">
+        <field name="name">DPR Equipment Report</field>
+        <field name="model">dpr.report</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">construction_dpr.dpr_equipment</field>
+        <field name="report_file">construction_dpr.dpr_equipment_report</field>
+    </record>
+
+    <!-- DPR Labor Report Action -->
+    <record id="action_report_dpr_labor" model="ir.actions.report">
+        <field name="name">DPR Labor Report</field>
+        <field name="model">dpr.report</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">construction_dpr.dpr_labor</field>
+        <field name="report_file">construction_dpr.dpr_labor_report</field>
+    </record>
+
+    <!-- DPR Progress Report Action -->
+    <record id="action_report_dpr_progress" model="ir.actions.report">
+        <field name="name">DPR Progress Report</field>
+        <field name="model">dpr.report</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">construction_dpr.dpr_progress</field>
+        <field name="report_file">construction_dpr.dpr_progress_report</field>
+    </record>
+</odoo>

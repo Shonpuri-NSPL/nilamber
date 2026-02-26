@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Photo Tree View -->
+    <record id="view_dpr_photo_tree" model="ir.ui.view">
+        <field name="name">dpr.photo.tree</field>
+        <field name="model">dpr.photo</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="report_id"/>
+                <field name="photo_name"/>
+                <field name="photo_type"/>
+                <field name="captured_by_id"/>
+                <field name="captured_time"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- Photo Form View -->
+    <record id="view_dpr_photo_form" model="ir.ui.view">
+        <field name="name">dpr.photo.form</field>
+        <field name="model">dpr.photo</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <field name="photo_name" required="1"/>
+                        <field name="photo" widget="image" options="{'size': [400, 300]}"/>
+                        <field name="photo_type"/>
+                        <field name="latitude"/>
+                        <field name="longitude"/>
+                        <field name="captured_by_id"/>
+                        <field name="captured_time"/>
+                    </group>
+                    <field name="notes"/>
+                </sheet>
+            </form>
+        </field>
+    </record>
+</odoo>

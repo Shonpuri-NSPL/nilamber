@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Dashboard Templates -->
+    <template id="portal_my_dpr">
+        <t t-call="web.layout">
+            <t t-set="title">My DPR Dashboard</t>
+            <div class="container">
+                <h1>My DPR Dashboard</h1>
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title">Projects</h5>
+                                <p class="card-text"><t t-esc="len(projects)"/></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </t>
+    </template>
+
+    <template id="portal_my_dpr_reports">
+        <t t-call="web.layout">
+            <t t-set="title">My DPR Reports</t>
+            <div class="container">
+                <h1>My DPR Reports</h1>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Report</th>
+                            <th>Project</th>
+                            <th>Date</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr t-foreach="reports" t-as="report">
+                            <td><t t-esc="report.name"/></td>
+                            <td><t t-esc="report.project_id.name"/></td>
+                            <td><t t-esc="report.report_date"/></td>
+                            <td><t t-esc="report.state"/></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </t>
+    </template>
+</odoo>

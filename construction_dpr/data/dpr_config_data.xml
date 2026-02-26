@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Default Configuration -->
+    <record id="dpr_config_default" model="dpr.config">
+        <field name="config_name">Default Configuration</field>
+        <field name="default_hourly_rate_skilled">500</field>
+        <field name="default_hourly_rate_unskilled">350</field>
+        <field name="default_hourly_rate_supervisor">800</field>
+        <field name="require_approval">True</field>
+        <field name="auto_submit_time">24</field>
+        <field name="photo_max_size">5</field>
+        <field name="enable_gps_verification">True</field>
+        <field name="enable_offline_sync">True</field>
+    </record>
+
+    <!-- Default Task Types -->
+    <record id="dpr_task_type_excavation" model="dpr.task.type">
+        <field name="name">Excavation</field>
+        <field name="code">EXC</field>
+        <field name="description">Earth excavation and grading work</field>
+        <field name="sequence">10</field>
+    </record>
+
+    <record id="dpr_task_type_foundation" model="dpr.task.type">
+        <field name="name">Foundation</field>
+        <field name="code">FND</field>
+        <field name="description">Foundation construction work</field>
+        <field name="sequence">20</field>
+    </record>
+
+    <record id="dpr_task_type_structure" model="dpr.task.type">
+        <field name="name">Structure</field>
+        <field name="code">STR</field>
+        <field name="description">Structural construction work</field>
+        <field name="sequence">30</field>
+    </record>
+
+    <record id="dpr_task_type_finishing" model="dpr.task.type">
+        <field name="name">Finishing</field>
+        <field name="code">FIN</field>
+        <field name="description">Finishing and interior work</field>
+        <field name="sequence">40</field>
+    </record>
+
+    <record id="dpr_task_type_mep" model="dpr.task.type">
+        <field name="name">MEP</field>
+        <field name="code">MEP</field>
+        <field name="description">Mechanical, Electrical, Plumbing work</field>
+        <field name="sequence">50</field>
+    </record>
+
+    <record id="dpr_task_type_other" model="dpr.task.type">
+        <field name="name">Other</field>
+        <field name="code">OTH</field>
+        <field name="description">Other types of construction work</field>
+        <field name="sequence">60</field>
+    </record>
+
+    <!-- Activity Types -->
+    <record id="mail_activity_dpr_approval" model="mail.activity.type">
+        <field name="name">DPR Approval</field>
+        <field name="icon">fa-check</field>
+        <field name="sequence">1</field>
+    </record>
+
+    <!-- Default Equipment Types -->
+    <record id="dpr_equipment_type_excavator" model="dpr.equipment.type">
+        <field name="name">Excavator</field>
+        <field name="code">EXC</field>
+        <field name="description">Excavator equipment</field>
+    </record>
+
+    <record id="dpr_equipment_type_crane" model="dpr.equipment.type">
+        <field name="name">Crane</field>
+        <field name="code">CRN</field>
+        <field name="description">Crane equipment</field>
+    </record>
+
+    <record id="dpr_equipment_type_concrete_mixer" model="dpr.equipment.type">
+        <field name="name">Concrete Mixer</field>
+        <field name="code">CMX</field>
+        <field name="description">Concrete mixer equipment</field>
+    </record>
+
+    <record id="dpr_equipment_type_compactor" model="dpr.equipment.type">
+        <field name="name">Compactor</field>
+        <field name="code">CMP</field>
+        <field name="description">Compactor equipment</field>
+    </record>
+
+    <record id="dpr_equipment_type_dumper" model="dpr.equipment.type">
+        <field name="name">Dumper</field>
+        <field name="code">DMP</field>
+        <field name="description">Dumper equipment</field>
+    </record>
+
+    <record id="dpr_equipment_type_bulldozer" model="dpr.equipment.type">
+        <field name="name">Bulldozer</field>
+        <field name="code">BZD</field>
+        <field name="description">Bulldozer equipment</field>
+    </record>
+
+    <record id="dpr_equipment_type_concrete_pump" model="dpr.equipment.type">
+        <field name="name">Concrete Pump</field>
+        <field name="code">CPM</field>
+        <field name="description">Concrete pump equipment</field>
+    </record>
+
+    <record id="dpr_equipment_type_hoist" model="dpr.equipment.type">
+        <field name="name">Hoist</field>
+        <field name="code">HST</field>
+        <field name="description">Hoist equipment</field>
+    </record>
+
+    <record id="dpr_equipment_type_generator" model="dpr.equipment.type">
+        <field name="name">Generator</field>
+        <field name="code">GEN</field>
+        <field name="description">Generator equipment</field>
+    </record>
+
+    <record id="dpr_equipment_type_other" model="dpr.equipment.type">
+        <field name="name">Other</field>
+        <field name="code">OTH</field>
+        <field name="description">Other equipment types</field>
+    </record>
+</odoo>

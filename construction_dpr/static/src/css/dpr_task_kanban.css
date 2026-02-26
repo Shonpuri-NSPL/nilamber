@@ -1,0 +1,284 @@
+_/* DPR Task Kanban View - Modern Dashboard Style */
+
+.o_dpr_kanban {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+
+.o_dpr_kanban .o_kanban_group {
+    flex: 0 0 auto;
+    width: 320px !important;
+    min-width: 320px;
+    max-width: 320px;
+    margin-right: 12px;
+    background: #f8f9fa;
+    border-radius: 12px;
+    padding: 8px;
+}
+
+.o_dpr_kanban .o_kanban_group:nth-child(1) {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+.o_dpr_kanban .o_kanban_group:nth-child(2) {
+    background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+}
+
+.o_dpr_kanban .o_kanban_group:nth-child(3) {
+    background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+}
+
+.o_dpr_kanban .o_kanban_group:nth-child(4) {
+    background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+}
+
+.o_dpr_kanban .o_kanban_group:nth-child(5) {
+    background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+}
+
+.o_dpr_kanban .o_kanban_header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-bottom: 8px;
+    border-bottom: 2px solid rgba(255,255,255,0.3);
+    margin-bottom: 10px;
+}
+
+.o_dpr_task_card {
+    background: #ffffff;
+    border-radius: 12px;
+    padding: 14px;
+    margin-bottom: 10px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    transition: all 0.3s ease;
+    border-left: 4px solid #667eea;
+}
+
+.o_dpr_task_card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.12);
+}
+
+.o_dpr_task_card.oe_kanban_overdue {
+    border-left-color: #dc3545;
+    background: linear-gradient(to right, #fff5f5 0%, #ffffff 20%);
+}
+
+.o_dpr_kanban_header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+}
+
+.o_dpr_task_code {
+    font-size: 11px;
+    font-weight: 600;
+    color: #6c757d;
+    display: flex;
+    align-items: center;
+}
+
+.o_dpr_task_code i {
+    color: #667eea;
+}
+
+.o_dpr_priority .badge {
+    font-size: 9px;
+    padding: 3px 6px;
+    border-radius: 10px;
+    text-transform: uppercase;
+    font-weight: 600;
+}
+
+.o_dpr_task_name {
+    font-size: 14px;
+    font-weight: 600;
+    color: #212529;
+    margin-bottom: 8px;
+    line-height: 1.4;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.o_dpr_task_level .badge {
+    font-size: 10px;
+    padding: 4px 8px;
+    border-radius: 6px;
+    font-weight: 500;
+}
+
+.o_dpr_hierarchy_info {
+    background: #f8f9fa;
+    border-radius: 8px;
+    padding: 8px;
+    margin: 10px 0;
+}
+
+.o_dpr_hierarchy_item {
+    font-size: 12px;
+    color: #495057;
+    display: flex;
+    align-items: center;
+    padding: 3px 0;
+}
+
+.o_dpr_hierarchy_item i {
+    width: 20px;
+    text-align: center;
+}
+
+.o_dpr_progress_section .progress {
+    border-radius: 6px;
+    background-color: #e9ecef;
+}
+
+.o_dpr_progress_section .progress-bar {
+    border-radius: 6px;
+    transition: width 0.6s ease;
+}
+
+.o_dpr_activity_stats {
+    background: #f8f9fa;
+    border-radius: 8px;
+    padding: 10px;
+}
+
+.o_dpr_stat_box {
+    background: white;
+    border-radius: 8px;
+    padding: 6px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+}
+
+.o_dpr_stat_value {
+    font-size: 18px;
+    font-weight: 700;
+    line-height: 1;
+}
+
+.o_dpr_stat_label {
+    font-size: 9px;
+    text-transform: uppercase;
+    color: #6c757d;
+    margin-top: 2px;
+}
+
+.o_dpr_activity_status .badge {
+    font-size: 11px;
+    padding: 6px 10px;
+    border-radius: 6px;
+}
+
+.o_dpr_kanban_footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 10px;
+    border-top: 1px solid #e9ecef;
+}
+
+.o_dpr_status_badge .badge {
+    font-size: 10px;
+    padding: 4px 8px;
+    border-radius: 6px;
+}
+
+.o_dpr_due_date {
+    font-size: 11px;
+}
+
+.o_dpr_assignee {
+    padding-top: 8px;
+    border-top: 1px solid #e9ecef;
+}
+
+/* Kanban Column Headers */
+.o_dpr_kanban .o_kanban_header_title {
+    color: white !important;
+    font-weight: 600;
+    font-size: 14px;
+}
+
+.o_dpr_kanban .o_kanban_header_title .o_kanban_quick_add {
+    color: white !important;
+}
+
+/* Additional Modern Styles */
+.o_dpr_task_card {
+    position: relative;
+    overflow: hidden;
+}
+
+.o_dpr_task_card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 4px;
+    height: 100%;
+    background: #667eea;
+    border-radius: 12px 0 0 12px;
+}
+
+.o_dpr_task_card:hover::before {
+    width: 6px;
+    background: #764ba2;
+}
+
+/* Status-based left border colors */
+.o_dpr_task_card[data-state="completed"]::before {
+    background: #28a745;
+}
+
+.o_dpr_task_card[data-state="in_progress"]::before {
+    background: #007bff;
+}
+
+.o_dpr_task_card[data-state="pending"]::before {
+    background: #6c757d;
+}
+
+.o_dpr_task_card[data-state="blocked"]::before {
+    background: #dc3545;
+}
+
+.o_dpr_task_card[data-state="verified"]::before {
+    background: #20c997;
+}
+
+/* Smooth animations */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.o_dpr_task_card {
+    animation: fadeInUp 0.3s ease forwards;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .o_dpr_kanban .o_kanban_group {
+        width: 280px !important;
+        min-width: 280px;
+    }
+    
+    .o_dpr_task_card {
+        padding: 10px;
+    }
+    
+    .o_dpr_task_name {
+        font-size: 13px;
+    }
+}

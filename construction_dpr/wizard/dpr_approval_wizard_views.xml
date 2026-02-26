@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Approval Wizard Form -->
+    <record id="view_dpr_approval_wizard_form" model="ir.ui.view">
+        <field name="name">dpr.approval.wizard.form</field>
+        <field name="model">dpr.approval.wizard</field>
+        <field name="arch" type="xml">
+            <form>
+                <group>
+                    <field name="action_type" widget="radio"/>
+                    <field name="approve_all"/>
+                </group>
+                <group invisible="action_type == 'approve'">
+                    <field name="rejection_reason" required="1" placeholder="Reason for rejection..."/>
+                </group>
+                <footer>
+                    <button name="action_apply" string="Apply" type="object" class="oe_highlight"/>
+                    <button string="Cancel" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+</odoo>

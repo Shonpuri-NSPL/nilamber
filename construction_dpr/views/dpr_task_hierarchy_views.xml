@@ -1,0 +1,258 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    
+    <!-- Tower Tree View -->
+    <record id="view_dpr_task_tower_tree" model="ir.ui.view">
+        <field name="name">dpr.task.tower.tree</field>
+        <field name="model">dpr.task</field>
+        <field name="arch" type="xml">
+            <list string="Towers">
+                <field name="tower_code"/>
+                <field name="name"/>
+                <field name="project_id"/>
+                <field name="child_count" string="Floors"/>
+                <field name="activities_total"/>
+                <field name="activities_completed"/>
+                <field name="activities_progress_pct" widget="progressbar"/>
+                <field name="state"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- Floor Tree View -->
+    <record id="view_dpr_task_floor_tree" model="ir.ui.view">
+        <field name="name">dpr.task.floor.tree</field>
+        <field name="model">dpr.task</field>
+        <field name="arch" type="xml">
+            <list string="Floors">
+                <field name="floor_name"/>
+                <field name="floor_number"/>
+                <field name="parent_id" string="Tower"/>
+                <field name="child_count" string="Units"/>
+                <field name="activities_total"/>
+                <field name="activities_completed"/>
+                <field name="activities_progress_pct" widget="progressbar"/>
+                <field name="state"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- Unit Tree View -->
+    <record id="view_dpr_task_unit_tree" model="ir.ui.view">
+        <field name="name">dpr.task.unit.tree</field>
+        <field name="model">dpr.task</field>
+        <field name="arch" type="xml">
+            <list string="Units">
+                <field name="unit_number"/>
+                <field name="name"/>
+                <field name="unit_type"/>
+                <field name="parent_id" string="Floor"/>
+                <field name="carpet_area"/>
+                <field name="is_sold"/>
+                <field name="customer_id"/>
+                <field name="activities_total"/>
+                <field name="activities_completed"/>
+                <field name="activities_progress_pct" widget="progressbar"/>
+                <field name="state"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- Activity Tree View -->
+    <record id="view_dpr_task_activity_tree" model="ir.ui.view">
+        <field name="name">dpr.task.activity.tree</field>
+        <field name="model">dpr.task</field>
+        <field name="arch" type="xml">
+            <list string="Activities" decoration-success="activity_status=='done'"
+                  decoration-warning="activity_status=='in_progress'" 
+                  decoration-muted="activity_status in ['not_in_scope', 'client_scope']">
+                <field name="sequence" widget="handle"/>
+                <field name="name"/>
+                <field name="parent_id" string="Unit"/>
+                <field name="activity_category"/>
+                <field name="activity_status"/>
+                <field name="assigned_to_id"/>
+                <field name="planned_start_date"/>
+                <field name="planned_end_date"/>
+                <field name="progress_percentage" widget="progressbar"/>
+                <field name="state"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- Unit Form View with Activities -->
+    <record id="view_dpr_task_unit_form" model="ir.ui.view">
+        <field name="name">dpr.task.unit.form</field>
+        <field name="model">dpr.task</field>
+        <field name="arch" type="xml">
+            <form string="Unit">
+                <header>
+                    <button name="action_start" string="Start" type="object" 
+                            invisible="state != 'pending'" class="oe_highlight"/>
+                    <button name="action_complete" string="Complete" type="object" 
+                            invisible="state != 'in_progress'" class="oe_highlight"/>
+                    <button name="action_view_activities" string="View Activities" type="object" 
+                            class="oe_highlight"/>
+                    <field name="state" widget="statusbar" 
+                           statusbar_visible="pending,in_progress,completed,verified"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="action_view_children" type="object" 
+                                class="oe_stat_button" icon="fa-tasks">
+                            <field name="child_count" widget="statinfo" string="Activities"/>
+                        </button>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="project_id"/>
+                            <field name="parent_id" string="Floor" domain="[('task_level', '=', 'floor')]"/>
+                            <field name="task_level" invisible="1"/>
+                            <field name="unit_number"/>
+                            <field name="name"/>
+                            <field name="unit_type"/>
+                        </group>
+                        <group>
+                            <field name="carpet_area"/>
+                            <field name="built_up_area"/>
+                            <field name="is_sold"/>
+                            <field name="customer_id" invisible="not is_sold"/>
+                            <field name="sale_date" invisible="not is_sold"/>
+                            <field name="possession_date"/>
+                        </group>
+                    </group>
+                    <group>
+                        <group>
+                            <field name="planned_start_date"/>
+                            <field name="planned_end_date"/>
+                            <field name="assigned_to_id"/>
+                        </group>
+                        <group>
+                            <field name="activities_total"/>
+                            <field name="activities_completed"/>
+                            <field name="activities_in_progress"/>
+                            <field name="activities_progress_pct" widget="progressbar"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Activities">
+                            <field name="child_ids" context="{'default_task_level': 'activity', 'default_parent_id': id}">
+                                <list editable="bottom" decoration-success="activity_status=='done'"
+                                      decoration-warning="activity_status=='in_progress'">
+                                    <field name="sequence" widget="handle"/>
+                                    <field name="name"/>
+                                    <field name="activity_category"/>
+                                    <field name="activity_status"/>
+                                    <field name="assigned_to_id"/>
+                                    <field name="planned_start_date"/>
+                                    <field name="planned_end_date"/>
+                                    <field name="progress_percentage" widget="progressbar"/>
+                                    <field name="state"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="Description">
+                            <field name="description"/>
+                        </page>
+                    </notebook>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids"/>
+                    <field name="activity_ids"/>
+                    <field name="message_ids"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <!-- Activity Template Views -->
+    <record id="view_dpr_activity_template_tree" model="ir.ui.view">
+        <field name="name">dpr.activity.template.tree</field>
+        <field name="model">dpr.activity.template</field>
+        <field name="arch" type="xml">
+            <list string="Activity Templates">
+                <field name="sequence" widget="handle"/>
+                <field name="code"/>
+                <field name="name"/>
+                <field name="category"/>
+                <field name="estimated_duration_days"/>
+                <field name="estimated_hours"/>
+                <field name="is_mandatory"/>
+                <field name="active"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_dpr_activity_template_form" model="ir.ui.view">
+        <field name="name">dpr.activity.template.form</field>
+        <field name="model">dpr.activity.template</field>
+        <field name="arch" type="xml">
+            <form string="Activity Template">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                            <field name="code"/>
+                            <field name="category"/>
+                            <field name="sequence"/>
+                        </group>
+                        <group>
+                            <field name="estimated_duration_days"/>
+                            <field name="estimated_hours"/>
+                            <field name="is_mandatory"/>
+                            <field name="active"/>
+                        </group>
+                    </group>
+                    <group>
+                        <field name="description"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Actions -->
+    <record id="action_dpr_task_towers" model="ir.actions.act_window">
+        <field name="name">Towers</field>
+        <field name="res_model">dpr.task</field>
+        <field name="view_mode">list,form</field>
+        <field name="domain">[('task_level', '=', 'tower')]</field>
+        <field name="context">{'default_task_level': 'tower'}</field>
+        <field name="view_id" ref="view_dpr_task_tower_tree"/>
+    </record>
+
+    <record id="action_dpr_task_floors" model="ir.actions.act_window">
+        <field name="name">Floors</field>
+        <field name="res_model">dpr.task</field>
+        <field name="view_mode">list,form</field>
+        <field name="domain">[('task_level', '=', 'floor')]</field>
+        <field name="context">{'default_task_level': 'floor'}</field>
+        <field name="view_id" ref="view_dpr_task_floor_tree"/>
+    </record>
+
+    <record id="action_dpr_task_units" model="ir.actions.act_window">
+        <field name="name">Units</field>
+        <field name="res_model">dpr.task</field>
+        <field name="view_mode">list,form</field>
+        <field name="domain">[('task_level', '=', 'unit')]</field>
+        <field name="context">{'default_task_level': 'unit'}</field>
+        <field name="view_id" ref="view_dpr_task_unit_tree"/>
+    </record>
+
+    <record id="action_dpr_task_activities" model="ir.actions.act_window">
+        <field name="name">Activities</field>
+        <field name="res_model">dpr.task</field>
+        <field name="view_mode">list,form</field>
+        <field name="domain">[('task_level', '=', 'activity')]</field>
+        <field name="context">{'default_task_level': 'activity'}</field>
+        <field name="view_id" ref="view_dpr_task_activity_tree"/>
+    </record>
+
+    <record id="action_dpr_activity_templates" model="ir.actions.act_window">
+        <field name="name">Activity Templates</field>
+        <field name="res_model">dpr.activity.template</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+
+</odoo>

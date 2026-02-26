@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Material Tree View -->
+    <record id="view_dpr_material_tree" model="ir.ui.view">
+        <field name="name">dpr.material.tree</field>
+        <field name="model">dpr.material</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="report_id"/>
+                <field name="material_type"/>
+                <field name="item_name"/>
+                <field name="quantity" sum="Qty"/>
+                <field name="unit"/>
+                <field name="rate"/>
+                <field name="amount" sum="Amount"/>
+                <field name="source"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- Equipment Tree View -->
+    <record id="view_dpr_equipment_tree" model="ir.ui.view">
+        <field name="name">dpr.equipment.tree</field>
+        <field name="model">dpr.equipment</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="report_id"/>
+                <field name="equipment_type"/>
+                <field name="equipment_name"/>
+                <field name="hours_operated" sum="Hours"/>
+                <field name="rental_rate"/>
+                <field name="rental_amount" sum="Amount"/>
+                <field name="maintenance_status"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- Weather Form View -->
+    <record id="view_dpr_weather_form" model="ir.ui.view">
+        <field name="name">dpr.weather.form</field>
+        <field name="model">dpr.weather</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <field name="weather_condition" required="1"/>
+                        <field name="temperature"/>
+                        <field name="humidity"/>
+                        <field name="wind_speed"/>
+                        <field name="rainfall_mm"/>
+                        <field name="working_hours_lost"/>
+                    </group>
+                    <field name="weather_impact" placeholder="Impact on work..."/>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Photo Tree View -->
+    <record id="view_dpr_photo_tree" model="ir.ui.view">
+        <field name="name">dpr.photo.tree</field>
+        <field name="model">dpr.photo</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="report_id"/>
+                <field name="photo_name"/>
+                <field name="photo_type"/>
+                <field name="captured_by_id"/>
+                <field name="captured_time"/>
+            </list>
+        </field>
+    </record>
+</odoo>

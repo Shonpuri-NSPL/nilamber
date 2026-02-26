@@ -1,0 +1,310 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- DPR Report Tree View -->
+    <record id="view_dpr_report_tree" model="ir.ui.view">
+        <field name="name">dpr.report.tree</field>
+        <field name="model">dpr.report</field>
+        <field name="arch" type="xml">
+            <list decoration-success="state=='approved'" decoration-info="state=='submitted'"
+                  decoration-warning="state=='draft'" decoration-danger="state=='rejected'">
+                <field name="name"/>
+                <field name="project_id"/>
+                <field name="report_date"/>
+                <field name="prepared_by_id"/>
+                <field name="state" widget="badge"/>
+                <field name="total_labor_cost"/>
+                <field name="total_material_cost"/>
+                <field name="total_equipment_cost"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- DPR Report Form View -->
+    <record id="view_dpr_report_form" model="ir.ui.view">
+        <field name="name">dpr.report.form</field>
+        <field name="model">dpr.report</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button name="action_submit" string="Submit for Approval" type="object"
+                            invisible="[('state', '=', 'draft')]" class="oe_highlight"/>
+                    <button name="action_reset_to_draft" string="Reset to Draft" type="object"
+                            invisible="[('state', '=', 'submitted')]"/>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,submitted,approved,rejected"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="name" readonly="1"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="project_id" required="1"/>
+                            <field name="report_date" required="1"/>
+                            <field name="prepared_by_id" required="1"/>
+                        </group>
+                        <group>
+                            <field name="is_holiday"/>
+                            <field name="overall_progress"/>
+                            <field name="latitude"/>
+                            <field name="longitude"/>
+                        </group>
+                    </group>
+                    <group>
+                        <field name="work_summary" required="1" placeholder="Describe the work done today..."/>
+                    </group>
+                    <notebook>
+                        <page string="Labor">
+                            <field name="labor_ids" context="{'default_report_id': id}">
+                                <list editable="bottom">
+                                    <field name="employee_id" required="1"/>
+                                    <field name="work_type"/>
+                                    <field name="hours_worked" sum="Total Hours"/>
+                                    <field name="overtime_hours" sum="OT Hours"/>
+                                    <field name="hourly_rate"/>
+                                    <field name="wages_amount" sum="Wages"/>
+                                    <field name="present"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="Materials">
+                            <field name="material_ids" context="{'default_report_id': id}">
+                                <list editable="bottom">
+                                    <field name="material_type"/>
+                                    <field name="item_name" required="1"/>
+                                    <field name="quantity" sum="Qty"/>
+                                    <field name="unit"/>
+                                    <field name="rate"/>
+                                    <field name="amount" sum="Amount"/>
+                                    <field name="source"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="Equipment">
+                            <field name="equipment_ids" context="{'default_report_id': id}">
+                                <list editable="bottom">
+                                    <field name="equipment_type"/>
+                                    <field name="equipment_name" required="1"/>
+                                    <field name="hours_operated" sum="Hours"/>
+                                    <field name="rental_rate"/>
+                                    <field name="rental_amount" sum="Amount"/>
+                                    <field name="maintenance_status"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="Weather">
+                            <field name="weather_id" context="{'default_report_id': id}"/>
+                        </page>
+                        <page string="Photos">
+                            <field name="photo_ids" context="{'default_report_id': id}">
+                                <list>
+                                    <field name="photo_name"/>
+                                    <field name="photo_type"/>
+                                    <field name="captured_time"/>
+                                    <field name="captured_by_id"/>
+                                </list>
+                                <form>
+                                    <group>
+                                        <field name="photo_name" required="1"/>
+                                        <field name="photo" widget="image" options="{'size': [300, 200]}"/>
+                                        <field name="photo_type"/>
+                                        <field name="latitude"/>
+                                        <field name="longitude"/>
+                                    </group>
+                                </form>
+                            </field>
+                        </page>
+                        <page string="Additional Info">
+                            <group>
+                                <field name="delays_description" placeholder="Any delays or issues..."/>
+                                <field name="safety_incidents" placeholder="Safety incidents or observations..."/>
+                                <field name="notes" placeholder="Additional notes..."/>
+                            </group>
+                        </page>
+                        <page string="Costs">
+                            <group>
+                                <field name="total_labor_cost" readonly="1"/>
+                                <field name="total_material_cost" readonly="1"/>
+                                <field name="total_equipment_cost" readonly="1"/>
+                            </group>
+                        </page>
+                    </notebook>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <!-- DPR Report Search View -->
+    <record id="view_dpr_report_search" model="ir.ui.view">
+        <field name="name">dpr.report.search</field>
+        <field name="model">dpr.report</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name"/>
+                <field name="project_id"/>
+                <field name="prepared_by_id"/>
+                <filter string="Draft" name="draft" domain="[('state', '=', 'draft')]"/>
+                <filter string="Submitted" name="submitted" domain="[('state', '=', 'submitted')]"/>
+                <filter string="Approved" name="approved" domain="[('state', '=', 'approved')]"/>
+                <filter string="Rejected" name="rejected" domain="[('state', '=', 'rejected')]"/>
+                <filter string="Today" name="today" date="report_date"/>
+                <group>
+                    <filter name="group_by_project"  context="{'group_by': 'project_id'}"/>
+                    <filter name="group_by_state" string="State" context="{'group_by': 'state'}"/>
+                    <filter name="group_by_date" string="Date" context="{'group_by': 'report_date'}"/>
+                    <filter name="group_by_prepared" string="Prepared By" context="{'group_by': 'prepared_by_id'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- DPR Report Pivot View -->
+    <record id="view_dpr_report_pivot" model="ir.ui.view">
+        <field name="name">dpr.report.pivot</field>
+        <field name="model">dpr.report</field>
+        <field name="arch" type="xml">
+            <pivot>
+                <field name="project_id" type="row"/>
+                <field name="report_date" type="col"/>
+                <field name="total_labor_cost" type="measure"/>
+                <field name="total_material_cost" type="measure"/>
+                <field name="total_equipment_cost" type="measure"/>
+            </pivot>
+        </field>
+    </record>
+
+    <!-- DPR Report Graph View -->
+    <record id="view_dpr_report_graph" model="ir.ui.view">
+        <field name="name">dpr.report.graph</field>
+        <field name="model">dpr.report</field>
+        <field name="arch" type="xml">
+            <graph>
+                <field name="project_id" type="row"/>
+                <field name="report_date" type="col"/>
+                <field name="total_labor_cost" type="measure"/>
+                <field name="total_material_cost" type="measure"/>
+                <field name="total_equipment_cost" type="measure"/>
+            </graph>
+        </field>
+    </record>
+
+    <!-- DPR Report Calendar View -->
+    <record id="view_dpr_report_calendar" model="ir.ui.view">
+        <field name="name">dpr.report.calendar</field>
+        <field name="model">dpr.report</field>
+        <field name="arch" type="xml">
+            <calendar date_start="report_date" color="project_id" string="DPR Reports">
+                <field name="name"/>
+                <field name="project_id"/>
+                <field name="prepared_by_id"/>
+                <field name="state"/>
+                <field name="total_labor_cost"/>
+                <field name="total_material_cost"/>
+                <field name="total_equipment_cost"/>
+            </calendar>
+        </field>
+    </record>
+
+    <!-- DPR Report Kanban View -->
+    <record id="view_dpr_report_kanban" model="ir.ui.view">
+        <field name="name">dpr.report.kanban</field>
+        <field name="model">dpr.report</field>
+        <field name="arch" type="xml">
+            <kanban default_group_by="state" class="o_kanban_mobile" sample="1">
+                <field name="state"/>
+                <field name="project_id"/>
+                <field name="total_labor_cost"/>
+                <field name="total_material_cost"/>
+                <field name="total_equipment_cost"/>
+                <field name="activity_ids"/>
+                <field name="activity_state"/>
+                <field name="is_holiday"/>
+                <progressbar field="state" colors='{"approved": "success", "submitted": "warning", "draft": "200", "rejected": "danger"}'/>
+                <templates>
+                    <t t-name="card">
+                        <div class="d-flex flex-column gap-1">
+                            <div class="d-flex justify-content-between align-items-start">
+                                <div class="fw-bold fs-5 text-truncate" style="max-width: 70%;">
+                                    <field name="name"/>
+                                </div>
+                                <span class="badge rounded-pill" t-attf-class="{{record.is_holiday.raw_value ? 'bg-warning' : 'bg-light text-dark'}}">
+                                    <t t-if="record.is_holiday.raw_value">Holiday</t>
+                                    <t t-else="">DPR</t>
+                                </span>
+                            </div>
+                            <div class="text-muted small">
+                                <field name="project_id"/>
+                            </div>
+                            <div class="d-flex align-items-center text-muted small">
+                                <i class="fa fa-calendar me-1" title="Report Date"/>
+                                <field name="report_date"/>
+                            </div>
+                            <div class="d-flex align-items-center text-muted small">
+                                <i class="fa fa-user me-1" title="Prepared By"/>
+                                <field name="prepared_by_id"/>
+                            </div>
+                        </div>
+                        <div class="mt-2 pt-2 border-top">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div class="text-success fw-bold">
+                                    <i class="fa fa-users me-1" title="Labor Cost"/>
+                                    <field name="total_labor_cost"/>
+                                </div>
+                                <div class="text-primary fw-bold">
+                                    <i class="fa fa-cubes me-1" title="Material Cost"/>
+                                    <field name="total_material_cost"/>
+                                </div>
+                                <div class="text-warning fw-bold">
+                                    <i class="fa fa-wrench me-1" title="Equipment Cost"/>
+                                    <field name="total_equipment_cost"/>
+                                </div>
+                            </div>
+                        </div>
+                        <footer class="pt-2 mt-2 border-top">
+                            <div class="d-flex align-items-center">
+                                <field name="activity_ids" widget="kanban_activity"/>
+                            </div>
+                        </footer>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
+    <!-- DPR Report Action -->
+    <record id="action_dpr_report" model="ir.actions.act_window">
+        <field name="name">Daily Progress Reports</field>
+        <field name="res_model">dpr.report</field>
+        <field name="view_mode">list,form,pivot,graph,calendar,kanban</field>
+        <field name="search_view_id" ref="view_dpr_report_search"/>
+    </record>
+
+    <!-- Pending Approvals Action -->
+    <record id="action_dpr_pending_approvals" model="ir.actions.act_window">
+        <field name="name">Pending Approvals</field>
+        <field name="res_model">dpr.report</field>
+        <field name="view_mode">list,form,pivot,graph,calendar,kanban</field>
+        <field name="domain">[('state', '=', 'submitted')]</field>
+        <field name="search_view_id" ref="view_dpr_report_search"/>
+    </record>
+
+    <!-- Approved DPRs Action -->
+    <record id="action_dpr_approved" model="ir.actions.act_window">
+        <field name="name">Approved DPRs</field>
+        <field name="res_model">dpr.report</field>
+        <field name="view_mode">list,form,pivot,graph,calendar,kanban</field>
+        <field name="domain">[('state', '=', 'approved')]</field>
+        <field name="search_view_id" ref="view_dpr_report_search"/>
+    </record>
+
+    <!-- Create DPR Action -->
+    <record id="action_dpr_report_create" model="ir.actions.act_window">
+        <field name="name">New Daily Report</field>
+        <field name="res_model">dpr.report</field>
+        <field name="view_mode">form</field>
+        <field name="target">current</field>
+        <field name="context">{'form_view_initial_mode': 'edit'}</field>
+    </record>
+</odoo>

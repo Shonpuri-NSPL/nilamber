@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Demo Project -->
+    <record id="demo_project_1" model="dpr.project">
+        <field name="name">Demo Construction Project</field>
+        <field name="code">PRJ/00001</field>
+        <field name="description">This is a demo construction project for testing DPR module functionality.</field>
+        <field name="location">123 Construction Site, City</field>
+        <field name="start_date">2024-01-01</field>
+        <field name="end_date">2024-12-31</field>
+        <field name="project_type">commercial</field>
+        <field name="state">active</field>
+        <field name="estimated_budget">1000000</field>
+    </record>
+
+    <!-- Demo Task -->
+    <record id="demo_task_1" model="dpr.task">
+        <field name="name">Foundation Work</field>
+        <field name="task_code">TSK/00001</field>
+        <field name="project_id">demo_project_1</field>
+        <field name="description">Foundation excavation and concrete work</field>
+        <field name="planned_start_date">2024-01-01</field>
+        <field name="planned_end_date">2024-01-31</field>
+        <field name="task_type">foundation</field>
+        <field name="priority">high</field>
+        <field name="state">in_progress</field>
+    </record>
+
+    <!-- Demo Task 2 -->
+    <record id="demo_task_2" model="dpr.task">
+        <field name="name">Structural Work</field>
+        <field name="task_code">TSK/00002</field>
+        <field name="project_id">demo_project_1</field>
+        <field name="description">Steel structure erection</field>
+        <field name="planned_start_date">2024-02-01</field>
+        <field name="planned_end_date">2024-06-30</field>
+        <field name="task_type">structure</field>
+        <field name="priority">medium</field>
+        <field name="state">pending</field>
+    </record>
+
+    <!-- Demo Employee -->
+    <record id="demo_employee_1" model="dpr.employee">
+        <field name="name">John Supervisor</field>
+        <field name="employee_code">EMP/00001</field>
+        <field name="phone">9876543210</field>
+        <field name="email">john@example.com</field>
+        <field name="designation">Site Supervisor</field>
+        <field name="department">Operations</field>
+        <field name="hourly_rate">800</field>
+        <field name="mobile_login_enabled">True</field>
+    </record>
+
+    <!-- Demo Employee 2 -->
+    <record id="demo_employee_2" model="dpr.employee">
+        <field name="name">Jane Engineer</field>
+        <field name="employee_code">EMP/00002</field>
+        <field name="phone">9876543211</field>
+        <field name="email">jane@example.com</field>
+        <field name="designation">Site Engineer</field>
+        <field name="department">Technical</field>
+        <field name="hourly_rate">750</field>
+        <field name="mobile_login_enabled">True</field>
+    </record>
+</odoo>

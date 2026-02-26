@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Labor Tree View -->
+    <record id="view_dpr_labor_tree" model="ir.ui.view">
+        <field name="name">dpr.labor.tree</field>
+        <field name="model">dpr.labor</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="report_id"/>
+                <field name="employee_id"/>
+                <field name="work_type"/>
+                <field name="hours_worked" sum="Total Hours"/>
+                <field name="overtime_hours" sum="OT"/>
+                <field name="hourly_rate"/>
+                <field name="wages_amount" sum="Wages"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- Labor Search View -->
+<!--    <record id="view_dpr_labor_search" model="ir.ui.view">-->
+<!--        <field name="name">dpr.labor.search</field>-->
+<!--        <field name="model">dpr.labor</field>-->
+<!--        <field name="arch" type="xml">-->
+<!--            <search>-->
+<!--                <field name="report_id"/>-->
+<!--                <field name="employee_id"/>-->
+<!--                <filter string="Skilled" domain="[('work_type', '=', 'skilled')]"/>-->
+<!--                <filter string="Unskilled" domain="[('work_type', '=', 'unskilled')]"/>-->
+<!--            </search>-->
+<!--        </field>-->
+<!--    </record>-->
+</odoo>

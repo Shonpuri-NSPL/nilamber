@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Dashboard Action with Form View -->
+    <record id="action_dpr_dashboard" model="ir.actions.act_window">
+        <field name="name">DPR Dashboard</field>
+        <field name="res_model">dpr.dashboard</field>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="view_dpr_dashboard_form"/>
+    </record>
+
+    <!-- Main Dashboard View (QWeb) -->
+    <record id="dpr_dashboard_main" model="ir.ui.view">
+        <field name="name">dpr.dashboard.main</field>
+        <field name="model">dpr.dashboard</field>
+        <field name="type">qweb</field>
+        <field name="arch" type="xml">
+            <t t-call="web.layout">
+                <div class="o_dashboard_container">
+                    <div class="o_dashboard oe_right">
+                        <!-- Quick Actions -->
+                        <div class="o_dashboard_actions">
+                            <button type="action" name="%(construction_dpr.action_dpr_report_create)d" string="New DPR"
+                                    icon="fa-plus"/>
+                            <button type="action" name="%(construction_dpr.action_dpr_report_wizard)d"
+                                    string="Generate Report" icon="fa-bar-chart"/>
+                        </div>
+                    </div>
+                </div>
+            </t>
+        </field>
+    </record>
+
+    <!-- Dashboard Form View -->
+    <record id="view_dpr_dashboard_form" model="ir.ui.view">
+        <field name="name">dpr.dashboard.form</field>
+        <field name="model">dpr.dashboard</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                            <field name="dashboard_type"/>
+                        </group>
+                        <group>
+                            <field name="date_from"/>
+                            <field name="date_to"/>
+                        </group>
+                    </group>
+                    <group>
+                        <field name="project_ids" widget="many2many_tags"/>
+                    </group>
+                    <notebook>
+                        <page string="Overview">
+                            <div class="oe_dashboard_stat">
+                                <div class="oe_dashboard_value">
+                                    <field name="total_projects"/>
+                                    <label for="total_projects">Total Projects</label>
+                                </div>
+                                <div class="oe_dashboard_value">
+                                    <field name="active_projects"/>
+                                    <label for="active_projects">Active Projects</label>
+                                </div>
+                                <div class="oe_dashboard_value">
+                                    <field name="total_dpr_submitted"/>
+                                    <label for="total_dpr_submitted">Submitted DPRs</label>
+                                </div>
+                                <div class="oe_dashboard_value">
+                                    <field name="total_dpr_approved"/>
+                                    <label for="total_dpr_approved">Approved DPRs</label>
+                                </div>
+                            </div>
+                        </page>
+                        <page string="Labor Metrics">
+                            <group>
+                                <field name="total_labor_count"/>
+                                <field name="total_labor_hours"/>
+                                <field name="labor_utilization_rate"/>
+                            </group>
+                        </page>
+                        <page string="Cost Analysis">
+                            <group>
+                                <field name="total_labor_cost"/>
+                                <field name="total_material_cost"/>
+                                <field name="total_equipment_cost"/>
+                            </group>
+                        </page>
+                        <page string="Progress">
+                            <group>
+                                <field name="average_progress"/>
+                                <field name="weather_days_lost"/>
+                                <field name="equipment_efficiency"/>
+                            </group>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+</odoo>

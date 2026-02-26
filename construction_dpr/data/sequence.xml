@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Project Sequence -->
+    <record id="seq_dpr_project" model="ir.sequence">
+        <field name="name">DPR Project Sequence</field>
+        <field name="code">dpr.project</field>
+        <field name="prefix">PRJ/</field>
+        <field name="padding">5</field>
+        <field name="number_next">1</field>
+        <field name="number_increment">1</field>
+        <field name="company_id"></field>
+    </record>
+
+    <!-- Task Sequence -->
+    <record id="seq_dpr_task" model="ir.sequence">
+        <field name="name">DPR Task Sequence</field>
+        <field name="code">dpr.task</field>
+        <field name="prefix">TSK/</field>
+        <field name="padding">5</field>
+        <field name="number_next">1</field>
+        <field name="number_increment">1</field>
+        <field name="company_id"></field>
+    </record>
+
+    <!-- Employee Sequence -->
+    <record id="seq_dpr_employee" model="ir.sequence">
+        <field name="name">DPR Employee Sequence</field>
+        <field name="code">dpr.employee</field>
+        <field name="prefix">EMP/</field>
+        <field name="padding">5</field>
+        <field name="number_next">1</field>
+        <field name="number_increment">1</field>
+        <field name="company_id"></field>
+    </record>
+
+    <!-- DPR Report Sequence -->
+    <record id="seq_dpr_report" model="ir.sequence">
+        <field name="name">DPR Report Sequence</field>
+        <field name="code">dpr.report</field>
+        <field name="prefix">DPR/</field>
+        <field name="padding">5</field>
+        <field name="number_next">1</field>
+        <field name="number_increment">1</field>
+        <field name="company_id"></field>
+    </record>
+</odoo>

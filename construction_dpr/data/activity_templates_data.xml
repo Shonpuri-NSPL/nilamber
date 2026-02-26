@@ -1,0 +1,217 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        
+        <!-- 19 Standard Activities from Excel: Tower wise Activity status check.xlsx -->
+        
+        <record id="activity_template_01" model="dpr.activity.template">
+            <field name="name">RCC SLAB</field>
+            <field name="code">ACT-001</field>
+            <field name="sequence">1</field>
+            <field name="category">structural</field>
+            <field name="description">RCC Slab Work</field>
+            <field name="estimated_duration_days">7</field>
+            <field name="estimated_hours">56</field>
+            <field name="is_mandatory">True</field>
+        </record>
+
+        <record id="activity_template_02" model="dpr.activity.template">
+            <field name="name">BLOCK MASSONARY</field>
+            <field name="code">ACT-002</field>
+            <field name="sequence">2</field>
+            <field name="category">masonry</field>
+            <field name="description">Block Masonry Work</field>
+            <field name="estimated_duration_days">10</field>
+            <field name="estimated_hours">80</field>
+            <field name="is_mandatory">True</field>
+        </record>
+
+        <record id="activity_template_03" model="dpr.activity.template">
+            <field name="name">CONCEAL ELECTRIC CONDUIT</field>
+            <field name="code">ACT-003</field>
+            <field name="sequence">3</field>
+            <field name="category">electrical</field>
+            <field name="description">Concealed Electric Conduit Work</field>
+            <field name="estimated_duration_days">5</field>
+            <field name="estimated_hours">40</field>
+            <field name="is_mandatory">True</field>
+        </record>
+
+        <record id="activity_template_04" model="dpr.activity.template">
+            <field name="name">ELECTRIC ZARI FILLING</field>
+            <field name="code">ACT-004</field>
+            <field name="sequence">4</field>
+            <field name="category">electrical</field>
+            <field name="description">Electric Zari Filling Work</field>
+            <field name="estimated_duration_days">3</field>
+            <field name="estimated_hours">24</field>
+            <field name="is_mandatory">True</field>
+        </record>
+
+        <record id="activity_template_05" model="dpr.activity.template">
+            <field name="name">BOND IT APPLICATION</field>
+            <field name="code">ACT-005</field>
+            <field name="sequence">5</field>
+            <field name="category">other</field>
+            <field name="description">Bond It Application</field>
+            <field name="estimated_duration_days">2</field>
+            <field name="estimated_hours">16</field>
+            <field name="is_mandatory">True</field>
+        </record>
+
+        <record id="activity_template_06" model="dpr.activity.template">
+            <field name="name">INTERNAL PLASTER</field>
+            <field name="code">ACT-006</field>
+            <field name="sequence">6</field>
+            <field name="category">finishing</field>
+            <field name="description">Internal Plaster Work</field>
+            <field name="estimated_duration_days">8</field>
+            <field name="estimated_hours">64</field>
+            <field name="is_mandatory">True</field>
+        </record>
+
+        <record id="activity_template_07" model="dpr.activity.template">
+            <field name="name">WINDOW SILL</field>
+            <field name="code">ACT-007</field>
+            <field name="sequence">7</field>
+            <field name="category">finishing</field>
+            <field name="description">Window Sill Work</field>
+            <field name="estimated_duration_days">2</field>
+            <field name="estimated_hours">16</field>
+            <field name="is_mandatory">True</field>
+        </record>
+
+        <record id="activity_template_08" model="dpr.activity.template">
+            <field name="name">WOODEN DOOR FRAME</field>
+            <field name="code">ACT-008</field>
+            <field name="sequence">8</field>
+            <field name="category">carpentry</field>
+            <field name="description">Wooden Door Frame Installation</field>
+            <field name="estimated_duration_days">3</field>
+            <field name="estimated_hours">24</field>
+            <field name="is_mandatory">True</field>
+        </record>
+
+        <record id="activity_template_09" model="dpr.activity.template">
+            <field name="name">BATHROOM SUSPENDED PLUMBING</field>
+            <field name="code">ACT-009</field>
+            <field name="sequence">9</field>
+            <field name="category">plumbing</field>
+            <field name="description">Bathroom Suspended Plumbing Work</field>
+            <field name="estimated_duration_days">4</field>
+            <field name="estimated_hours">32</field>
+            <field name="is_mandatory">True</field>
+        </record>
+
+        <record id="activity_template_10" model="dpr.activity.template">
+            <field name="name">WATERPROOFING</field>
+            <field name="code">ACT-010</field>
+            <field name="sequence">10</field>
+            <field name="category">waterproofing</field>
+            <field name="description">Waterproofing Work</field>
+            <field name="estimated_duration_days">3</field>
+            <field name="estimated_hours">24</field>
+            <field name="is_mandatory">True</field>
+        </record>
+
+        <record id="activity_template_11" model="dpr.activity.template">
+            <field name="name">BATHROOM TILES</field>
+            <field name="code">ACT-011</field>
+            <field name="sequence">11</field>
+            <field name="category">tiling</field>
+            <field name="description">Bathroom Tiles Work</field>
+            <field name="estimated_duration_days">5</field>
+            <field name="estimated_hours">40</field>
+            <field name="is_mandatory">True</field>
+        </record>
+
+        <record id="activity_template_12" model="dpr.activity.template">
+            <field name="name">MAIN FLOORING</field>
+            <field name="code">ACT-012</field>
+            <field name="sequence">12</field>
+            <field name="category">flooring</field>
+            <field name="description">Main Flooring Work</field>
+            <field name="estimated_duration_days">7</field>
+            <field name="estimated_hours">56</field>
+            <field name="is_mandatory">True</field>
+        </record>
+
+        <record id="activity_template_13" model="dpr.activity.template">
+            <field name="name">KITCHEN PLATFORM</field>
+            <field name="code">ACT-013</field>
+            <field name="sequence">13</field>
+            <field name="category">finishing</field>
+            <field name="description">Kitchen Platform Work</field>
+            <field name="estimated_duration_days">3</field>
+            <field name="estimated_hours">24</field>
+            <field name="is_mandatory">True</field>
+        </record>
+
+        <record id="activity_template_14" model="dpr.activity.template">
+            <field name="name">LAMINATED FLUSH DOOR</field>
+            <field name="code">ACT-014</field>
+            <field name="sequence">14</field>
+            <field name="category">carpentry</field>
+            <field name="description">Laminated Flush Door Installation</field>
+            <field name="estimated_duration_days">2</field>
+            <field name="estimated_hours">16</field>
+            <field name="is_mandatory">True</field>
+        </record>
+
+        <record id="activity_template_15" model="dpr.activity.template">
+            <field name="name">UPVC DOORS &amp; WINDOWS</field>
+            <field name="code">ACT-015</field>
+            <field name="sequence">15</field>
+            <field name="category">fixtures</field>
+            <field name="description">UPVC Doors and Windows Installation</field>
+            <field name="estimated_duration_days">4</field>
+            <field name="estimated_hours">32</field>
+            <field name="is_mandatory">True</field>
+        </record>
+
+        <record id="activity_template_16" model="dpr.activity.template">
+            <field name="name">ELECTRIC WIRING</field>
+            <field name="code">ACT-016</field>
+            <field name="sequence">16</field>
+            <field name="category">electrical</field>
+            <field name="description">Electric Wiring Work</field>
+            <field name="estimated_duration_days">5</field>
+            <field name="estimated_hours">40</field>
+            <field name="is_mandatory">True</field>
+        </record>
+
+        <record id="activity_template_17" model="dpr.activity.template">
+            <field name="name">PUTTY &amp; PRIMER</field>
+            <field name="code">ACT-017</field>
+            <field name="sequence">17</field>
+            <field name="category">painting</field>
+            <field name="description">Putty and Primer Work</field>
+            <field name="estimated_duration_days">4</field>
+            <field name="estimated_hours">32</field>
+            <field name="is_mandatory">True</field>
+        </record>
+
+        <record id="activity_template_18" model="dpr.activity.template">
+            <field name="name">CP &amp; SANITARY FITTINGS</field>
+            <field name="code">ACT-018</field>
+            <field name="sequence">18</field>
+            <field name="category">fixtures</field>
+            <field name="description">CP and Sanitary Fittings Installation</field>
+            <field name="estimated_duration_days">3</field>
+            <field name="estimated_hours">24</field>
+            <field name="is_mandatory">True</field>
+        </record>
+
+        <record id="activity_template_19" model="dpr.activity.template">
+            <field name="name">BATHROOM CEILING/EPOXY</field>
+            <field name="code">ACT-019</field>
+            <field name="sequence">19</field>
+            <field name="category">finishing</field>
+            <field name="description">Bathroom Ceiling/Epoxy Work</field>
+            <field name="estimated_duration_days">2</field>
+            <field name="estimated_hours">16</field>
+            <field name="is_mandatory">True</field>
+        </record>
+
+    </data>
+</odoo>

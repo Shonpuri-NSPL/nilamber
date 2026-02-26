@@ -1,0 +1,318 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Employee Tree View -->
+    <record id="view_dpr_employee_tree" model="ir.ui.view">
+        <field name="name">dpr.employee.tree</field>
+        <field name="model">dpr.employee</field>
+        <field name="arch" type="xml">
+            <list decoration-success="mobile_login_enabled==True" decoration-muted="active==False">
+                <field name="employee_code"/>
+                <field name="name"/>
+                <field name="company_id"/>
+                <field name="hr_employee_id"/>
+                <field name="designation"/>
+                <field name="department"/>
+                <field name="phone"/>
+                <field name="user_id"/>
+                <field name="mobile_login_enabled" widget="boolean_icon"/>
+                <field name="active"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- Employee Form View -->
+    <record id="view_dpr_employee_form" model="ir.ui.view">
+        <field name="name">dpr.employee.form</field>
+        <field name="model">dpr.employee</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <div class="d-flex flex-column flex-sm-row align-items-center">
+                        <div class="o_employee_avatar ms-2 p-0">
+                            <field name="photo" widget='image' class="m-0"
+                                   options='{"size": [128, 158], "zoom": true, "preview_image": "photo"}'/>
+                        </div>
+                        <div class="col-12 col-sm-6 col-md-7 col-lg-8 px-4">
+                            <div class="oe_title mw-100 ps-0 pe-sm-2">
+                                <h1 class="d-flex flex-row align-items-center">
+                                    <field name="name" placeholder="Employee Name" required="True"
+                                           style="font-size: min(4vw, 2.6rem);" class="w-100"/>
+                                </h1>
+                                <h5 class="d-flex align-items-baseline mb-0">
+                                    <i class="fa fa-envelope fa-fw me-1 text-primary" title="Email"/>
+                                    <field name="email" widget="email" placeholder="e.g. johndoe@example.com"
+                                           string="Email" class="w-100 w-sm-75"/>
+                                </h5>
+                                <h5 class="d-flex align-items-baseline mb-0">
+                                    <i class="fa fa-phone fa-fw me-1 text-primary" title="Phone"/>
+                                    <field name="phone" widget="phone" placeholder="Phone Number" string="Phone"
+                                           class="w-100 w-sm-75"/>
+                                </h5>
+                            </div>
+                        </div>
+                    </div>
+                    <widget name="web_ribbon" title="Archived" bg_color="text-bg-danger" invisible="active"/>
+                    <notebook>
+                        <page name="employee_details" string="Employee Details">
+                            <group>
+                                <group string="Employee Information">
+                                    <field name="employee_code" readonly="1" force_save="1"/>
+                                    <field name="company_id"/>
+                                    <field name="hr_employee_id" widget="selection" placeholder="Select Odoo Employee"/>
+                                    <field name="designation"/>
+                                    <field name="department"/>
+                                    <field name="hourly_rate"/>
+                                </group>
+                                <group string="Odoo Integration">
+                                    <field name="user_id"/>
+                                    <field name="active"/>
+                                </group>
+                            </group>
+                        </page>
+                        <page name="mobile_settings" string="Mobile Settings">
+                            <group>
+                                <group string="Mobile Login">
+                                    <field name="mobile_login_enabled" on_change="1"/>
+                                    <field name="pin" password="True" placeholder="4-6 digit PIN"
+                                           invisible="not mobile_login_enabled"/>
+                                    <field name="pin_hash" readonly="1" force_save="1"
+                                           invisible="not mobile_login_enabled"/>
+                                    <field name="last_login"/>
+                                    <field name="login_count"/>
+                                </group>
+                                <group string="Authentication">
+                                    <field name="auth_token" readonly="1"/>
+                                    <field name="token_expiry" readonly="1"/>
+                                </group>
+                            </group>
+                            <group>
+                                <button name="generate_auth_token" string="Generate New Token" type="object"
+                                        class="oe_highlight"/>
+                                <button name="invalidate_token" string="Invalidate Token" type="object"/>
+                                <button name="action_reset_pin" string="Reset PIN" type="object"/>
+                            </group>
+                        </page>
+                        <page name="projects" string="Projects">
+                            <field name="project_ids"/>
+                        </page>
+                        <page name="access_control" string="Access Control">
+
+                            <p class="text-muted" string="Tower/Floor/Unit Access">
+                                Define which towers, floors, or units this employee can access for DPR reporting.
+                                Select a project, then choose tower/floor/unit based on cascading selection.
+                            </p>
+
+                            <field name="access_ids">
+                                <list editable="bottom">
+                                    <field name="project_id" context="{'dpr_access': 1}"/>
+                                    <field name="tower_id" domain="[('task_level', '=', 'tower')]"/>
+                                    <field name="floor_id" domain="[('task_level', '=', 'floor')]"/>
+                                    <field name="unit_id" domain="[('task_level', '=', 'unit')]"/>
+                                    <field name="active"/>
+                                </list>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <!-- Employee Search View -->
+    <record id="view_dpr_employee_search" model="ir.ui.view">
+        <field name="name">dpr.employee.search</field>
+        <field name="model">dpr.employee</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name"/>
+                <field name="employee_code"/>
+                <field name="company_id"/>
+                <field name="hr_employee_id"/>
+                <field name="designation"/>
+                <field name="department"/>
+                <field name="user_id"/>
+                <filter string="Active" name="active" domain="[('active', '=', True)]"/>
+                <filter string="Mobile Login Enabled" name="mobile_enabled"
+                        domain="[('mobile_login_enabled', '=', True)]"/>
+                <filter string="Linked to HR Employee" name="hr_linked" domain="[('hr_employee_id', '!=', False)]"/>
+                <filter string="Company" name="group_company" context="{'group_by': 'company_id'}"/>
+            </search>
+        </field>
+    </record>
+
+    <!-- Employee Action -->
+    <record id="action_dpr_employee" model="ir.actions.act_window">
+        <field name="name">DPR Employees</field>
+        <field name="res_model">dpr.employee</field>
+        <field name="view_mode">list,form,kanban</field>
+        <field name="search_view_id" ref="view_dpr_employee_search"/>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create your first DPR Employee
+            </p>
+            <p>
+                DPR Employees can be linked to Odoo HR Employees for seamless integration.
+            </p>
+        </field>
+    </record>
+
+    <!-- Employee Kanban View -->
+    <record id="view_dpr_employee_kanban" model="ir.ui.view">
+        <field name="name">dpr.employee.kanban</field>
+        <field name="model">dpr.employee</field>
+        <field name="arch" type="xml">
+            <kanban class="o_kanban_mobile o_dpr_employee_kanban" sample="1" duplicate="false">
+                <field name="id"/>
+                <field name="name"/>
+                <field name="employee_code"/>
+                <field name="company_id"/>
+                <field name="photo"/>
+                <field name="hr_employee_id"/>
+                <field name="designation"/>
+                <field name="department"/>
+                <field name="phone"/>
+                <field name="email"/>
+                <field name="mobile_login_enabled"/>
+                <field name="active"/>
+                <templates>
+                    <t t-name="card">
+                        <div class="d-flex align-items-center p-2 rounded-2 shadow-sm h-100"
+                             t-attf-style="background: linear-gradient(135deg, {{record.mobile_login_enabled.raw_value ? '#d4edda' : '#f8f9fa'}} 0%, {{record.mobile_login_enabled.raw_value ? '#c3e6cb' : '#e9ecef'}} 100%);">
+                            <!-- Photo -->
+                            <div class="me-2">
+                                <t t-if="record.photo.raw_value">
+                                    <field name="photo" widget="image" class="rounded-circle"
+                                           options="{'zoom': true, 'preview_image':'photo'}"
+                                           style="width: 45px; height: 45px; object-fit: cover;"/>
+                                </t>
+                                <t t-else=""
+                                   class="d-flex align-items-center justify-content-center bg-white rounded-circle shadow-sm"
+                                   style="width: 45px; height: 45px;">
+                                    <svg class="text-muted" style="width: 25px; height: 25px;" viewBox="0 0 20 20"
+                                         xmlns="http://www.w3.org/2000/svg">
+                                        <g fill="currentColor">
+                                            <path d="M 10 11 C 4.08 11 2 14 2 16 L 2 19 L 18 19 L 18 16 C 18 14 15.92 11 10 11 Z"/>
+                                            <circle cx="10" cy="5.5" r="4.5"/>
+                                        </g>
+                                    </svg>
+                                </t>
+                            </div>
+                            <!-- Info -->
+                            <div class="flex-grow-1 overflow-hidden">
+                                <div class="d-flex align-items-center">
+                                    <field class="fw-bold text-truncate" name="name"
+                                           style="font-size: 14px; max-width: 120px;"/>
+                                    <span class="badge ms-1"
+                                          t-attf-class="{{record.mobile_login_enabled.raw_value ? 'bg-success' : 'bg-secondary'}}"
+                                          style="font-size: 10px; padding: 2px 5px;">
+                                        <t t-if="record.mobile_login_enabled.raw_value">Mobile</t>
+                                    </span>
+                                </div>
+                                <div class="text-muted small text-truncate" style="font-size: 11px;">
+                                    <field name="employee_code"/>
+                                    <t t-if="record.designation.raw_value">|
+                                        <field name="designation"/>
+                                    </t>
+                                    <t t-if="record.phone.raw_value">|
+                                        <i class="fa fa-phone me-1"/>
+                                        <field name="phone"/>
+                                    </t>
+                                </div>
+                                <div class="text-muted text-truncate" style="font-size: 10px;">
+                                    <t t-if="record.company_id.raw_value">
+                                        <i class="fa fa-building me-1" title="Company"/>
+                                        <field name="company_id"/>
+                                    </t>
+
+                                </div>
+                            </div>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
+    <!-- ==================== -->
+    <!-- Employee Access Control -->
+    <!-- ==================== -->
+
+    <!-- Employee Access Tree View -->
+    <record id="view_dpr_employee_access_tree" model="ir.ui.view">
+        <field name="name">dpr.employee.access.tree</field>
+        <field name="model">dpr.employee.access</field>
+        <field name="arch" type="xml">
+            <list decoration-success="active==True" decoration-muted="active==False">
+                <field name="employee_id"/>
+                <field name="project_id"/>
+                <field name="tower_id"/>
+                <field name="floor_id"/>
+                <field name="unit_id"/>
+                <field name="active"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- Employee Access Form View -->
+    <record id="view_dpr_employee_access_form" model="ir.ui.view">
+        <field name="name">dpr.employee.access.form</field>
+        <field name="model">dpr.employee.access</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="employee_id"/>
+                            <field name="project_id"/>
+                        </group>
+                        <group>
+                            <field name="tower_id"/>
+                            <field name="floor_id"/>
+                            <field name="unit_id"/>
+                            <field name="active"/>
+                        </group>
+                    </group>
+                    <group>
+                        <field name="description"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Employee Access Search View -->
+    <record id="view_dpr_employee_access_search" model="ir.ui.view">
+        <field name="name">dpr.employee.access.search</field>
+        <field name="model">dpr.employee.access</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="employee_id"/>
+                <field name="project_id"/>
+                <field name="tower_id"/>
+                <field name="floor_id"/>
+                <field name="unit_id"/>
+                <filter string="Active" name="active" domain="[('active', '=', True)]"/>
+                <filter string="By Project" name="group_project" context="{'group_by': 'project_id'}"/>
+            </search>
+        </field>
+    </record>
+
+    <!-- Employee Access Action -->
+    <record id="action_dpr_employee_access" model="ir.actions.act_window">
+        <field name="name">Employee Access Control</field>
+        <field name="res_model">dpr.employee.access</field>
+        <field name="view_mode">list,form</field>
+        <field name="search_view_id" ref="view_dpr_employee_access_search"/>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create Employee Access Rule
+            </p>
+            <p>
+                Define which towers, floors, or units an employee can access for DPR reporting.
+            </p>
+        </field>
+    </record>
+
+
+</odoo>
