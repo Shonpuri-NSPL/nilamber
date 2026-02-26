@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record id="view_order_form_inherit_purchase_add_div" model="ir.ui.view">
+        <field name="name">purchase.order.form.purchase.add.div</field>
+        <field name="model">purchase.order</field>
+        <field name="inherit_id" ref="purchase.purchase_order_form"/>
+        <field name="priority">10</field>
+        <field name="arch" type="xml">
+            <xpath expr="//page[@name='products']/div[hasclass('clearfix')]" position="after">
+                <div style="margin-top:30px;">
+
+                    <!-- Top Text Section -->
+                    <table style="width:100%; border:1px solid black; border-collapse: collapse;">
+                        <tr>
+                            <td style="border:1px solid black; padding:5px;">
+                                Prepared By:
+                                <b>
+                                    <field name="prepared_by_name" nolabel="1"/>
+                                </b>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="border:1px solid black; padding:5px;">
+                                Approved By:
+                                <b>
+                                    <field name="approved_by_name" nolabel="1"/>
+                                </b>
+                            </td>
+                        </tr>
+                    </table>
+
+                    <!-- Signature Box Section -->
+                    <table style="width:100%; border:1px solid black; border-collapse: collapse; margin-top:10px;">
+                        <tr style="height:120px;">
+                            <td style="border:1px solid black; vertical-align:top; text-align:center; padding-top:10px;">
+                                <b>Prepared by</b>
+                            </td>
+                            <td style="border:1px solid black; vertical-align:top; text-align:center; padding-top:10px;">
+                                <b>Checked by</b>
+                            </td>
+                            <td style="border:1px solid black; vertical-align:top; text-align:center; padding-top:10px;">
+                                <b>Approved by</b>
+                            </td>
+                            <td style="border:1px solid black; vertical-align:top; text-align:center; padding-top:10px;">
+                                <b>Account dept.</b>
+                            </td>
+                        </tr>
+                    </table>
+
+                </div>
+
+            </xpath>
+
+        </field>
+    </record>
+
+
+
+
+</odoo>

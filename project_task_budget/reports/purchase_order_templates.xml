@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="report_purchaseorder_document_po" inherit_id="purchase.report_purchaseorder_document">
+
+        <xpath expr="//div[hasclass('page')]" position="after">
+
+            <div style="margin-top:40px;">
+
+                <!-- Top Text Section -->
+                <table style="width:100%; border:1px solid black; border-collapse: collapse;">
+                    <tr>
+                        <td style="border:1px solid black; padding:5px;">
+                            <b>Prepared By:</b>
+                            <span t-field="o.prepared_by_name"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="border:1px solid black; padding:5px;">
+                            <b>Approved By:</b>
+                            <span t-field="o.approved_by_name"/>
+                        </td>
+                    </tr>
+                </table>
+
+                <!-- Signature Box -->
+                <table style="width:100%; border:1px solid black; border-collapse: collapse; margin-top:10px;">
+                    <tr style="height:120px;">
+                        <td style="border:1px solid black; vertical-align:top; text-align:center; padding-top:10px;">
+                            <b>Prepared by</b>
+                        </td>
+                        <td style="border:1px solid black; vertical-align:top; text-align:center; padding-top:10px;">
+                            <b>Checked by</b>
+                        </td>
+                        <td style="border:1px solid black; vertical-align:top; text-align:center; padding-top:10px;">
+                            <b>Approved by</b>
+                        </td>
+                        <td style="border:1px solid black; vertical-align:top; text-align:center; padding-top:10px;">
+                            <b>Account dept.</b>
+                        </td>
+                    </tr>
+                </table>
+
+            </div>
+
+        </xpath>
+
+        <xpath expr="//div[@t-field='o.partner_id']" position="attributes">
+            <attribute name="t-options">{"widget": "contact", "fields": ["address", "name", "phone", "vat", "email"], "no_marker": True, "phone_icons": True}</attribute>
+        </xpath>
+
+        <xpath expr="//div[@t-field='o.dest_address_id']" position="attributes">
+            <attribute name="t-options">{"widget": "contact", "fields": ["address", "name", "phone", "vat", "email"], "no_marker": True, "phone_icons": True}</attribute>
+        </xpath>
+
+        <xpath expr="//div[hasclass('oe_structure')][2]" position="after">
+            <t t-set="amount_in_words" t-value="o.currency_id.amount_to_text(o.amount_total)"/>
+
+            <p>
+                <strong>Total Amount (in words):</strong>
+                <span t-esc="amount_in_words"/> Only.
+            </p>
+
+            <div>
+                <p>
+                    <strong>Terms and Conditions:-</strong>
+                    <span>Rate: GST Will Be Extra.</span>
+                </p>
+            </div>
+
+        </xpath>
+        <xpath expr="//p[hasclass('mt-4')]" position="replace">
+            <t t-set="notes" t-value="o.note"/>
+                <p>
+                    <strong> Remarks: </strong>
+                    <span t-esc="notes"/>
+                </p>
+
+        </xpath>
+
+    </template>
+
+    <template id="report_purchaseorder_document_rfq" inherit_id="purchase.report_purchasequotation_document">
+
+        <xpath expr="//div[hasclass('page')]" position="after">
+
+            <div style="margin-top:40px;">
+
+                <!-- Top Text Section -->
+                <table style="width:100%; border:1px solid black; border-collapse: collapse;">
+                    <tr>
+                        <td style="border:1px solid black; padding:5px;">
+                            <b>Prepared By:</b>
+                            <span t-field="o.prepared_by_name"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="border:1px solid black; padding:5px;">
+                            <b>Approved By:</b>
+                            <span t-field="o.approved_by_name"/>
+                        </td>
+                    </tr>
+                </table>
+
+                <!-- Signature Box -->
+                <table style="width:100%; border:1px solid black; border-collapse: collapse; margin-top:10px;">
+                    <tr style="height:120px;">
+                        <td style="border:1px solid black; vertical-align:top; text-align:center; padding-top:10px;">
+                            <b>Prepared by</b>
+                        </td>
+                        <td style="border:1px solid black; vertical-align:top; text-align:center; padding-top:10px;">
+                            <b>Checked by</b>
+                        </td>
+                        <td style="border:1px solid black; vertical-align:top; text-align:center; padding-top:10px;">
+                            <b>Approved by</b>
+                        </td>
+                        <td style="border:1px solid black; vertical-align:top; text-align:center; padding-top:10px;">
+                            <b>Account dept.</b>
+                        </td>
+                    </tr>
+                </table>
+
+            </div>
+
+        </xpath>
+
+    </template>
+</odoo>

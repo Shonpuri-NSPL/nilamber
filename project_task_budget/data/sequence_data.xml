@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record id="seq_project_project" model="ir.sequence">
+        <field name="name">Project</field>
+        <field name="code">sequence.project.code</field>
+        <field name="prefix">PRO/%(range_year)s/</field>
+        <field name="padding">4</field>
+        <field name="use_date_range">True</field>
+        <field name="company_id" eval="False"/>
+    </record>
+
+    <record id="seq_project_task" model="ir.sequence">
+        <field name="name">Project Task</field>
+        <field name="code">sequence.project.task.code</field>
+        <field name="prefix">TSK/%(range_year)s/</field>
+        <field name="padding">4</field>
+        <field name="use_date_range">True</field>
+        <field name="company_id" eval="False"/>
+    </record>
+
+    <record id="seq_project_subtask" model="ir.sequence">
+        <field name="name">Project Task: Subtask</field>
+        <field name="code">sequence.sub.task.code</field>
+        <field name="prefix">STSK/%(range_year)s/</field>
+        <field name="padding">4</field>
+        <field name="use_date_range">True</field>
+        <field name="company_id" eval="False"/>
+    </record>
+</odoo>
